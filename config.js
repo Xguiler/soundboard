@@ -1,5 +1,5 @@
 window.SB_CONFIG = {
-  SUPABASE_URL: "COLE_AQUI_A_URL_DO_SEU_PROJETO",
-  SUPABASE_ANON_KEY: "COLE_AQUI_A_ANON_KEY_PUBLICA",
-  ROOM_ID: "xguiler-soundboard-TROQUE-ESTE-CODIGO"
+  SUPABASE_URL: "https://ketkskvqabxfqgrhkegd.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_bsQ5nXIzAPWK6uIpHpixnw_n7bXTAQw",
+  ROOM_ID: "xguiler-soundboard-caos-control"
 };
