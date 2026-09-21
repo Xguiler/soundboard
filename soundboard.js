@@ -170,17 +170,70 @@ const sons = {
   "!danone": { url: "https://www.myinstants.com/media/sounds/olha-o-carro-do-danone-em-estourado.mp3", level: "apocalipse", cooldown: 10 }
 };
 
-function iniciarTimer(){if(timer)return;timer=setInterval(()=>{tempoRestante--;if(tempoRestante<=0){clearInterval(timer);timer=null;tempoRestante=0;nivelAtivo=0}atualizarHUD()},1000)}
+function iniciarTimer(){if(timer)return;timer=setInterval(()=>{tempoRestante--;if(tempoRestante<=0){clearInterval(timer);timer=null;tempoRestante=0;nivelAtivo=0;atualizarHUD();enviarEstadoPainel()}},1000)}
 function showDonateToast(text){}
 let donateQueueValor=0,donateQueueCount=0,donateQueueMaxNivel=0,donateFlushTimer=null,lastTipKey=null;
 function parseValor(rawAmount){const s=String(rawAmount).replace("R$","").replace(/\s/g,"").replace(",",".");const v=parseFloat(s);return Number.isFinite(v)?v:NaN}
 function nivelPorFaixa(valor){if(valor>=50)return 4;if(valor>=25)return 3;if(valor>=5)return 2;if(valor>=1)return 1;return 0}
-window.addEventListener("onEventReceived",function(obj){const listener=obj?.detail?.listener;if(listener==="tip-latest"){const ev=obj.detail.event||{};const valor=parseValor(ev.amount);if(isNaN(valor))return;const bucket=Math.floor(Date.now()/3000);const tipKey=ev._id||ev.id||ev.transactionId||ev.createdAt||`${valor}:${ev.name||ev.username||""}:${bucket}`;if(tipKey&&tipKey===lastTipKey)return;lastTipKey=tipKey;const nivelNovo=nivelPorFaixa(valor);const tempoExtra=Math.floor(valor*segundosPorReal);tempoRestante+=tempoExtra;if(nivelNovo>nivelAtivo)nivelAtivo=nivelNovo;iniciarTimer();atualizarHUD();donateQueueValor+=valor;donateQueueCount+=1;donateQueueMaxNivel=Math.max(donateQueueMaxNivel,nivelNovo);if(donateFlushTimer)clearTimeout(donateFlushTimer);donateFlushTimer=setTimeout(()=>{donateQueueValor=0;donateQueueCount=0;donateQueueMaxNivel=0;donateFlushTimer=null},5000);return}
-if(listener!=="message")return;const msg=obj.detail.event.data.text.trim().toLowerCase();const user=obj.detail.event.data.nick.trim().toLowerCase();if(user===ADMIN_NICK){if(msg.startsWith("!setreal ")){const novoValor=parseInt(msg.split(" ")[1],10);if(!isNaN(novoValor)&&novoValor>0){segundosPorReal=novoValor;atualizarHUD()}return}if(msg==="!statusadmin"){atualizarHUD();console.log("[STATUS]",{nivelAtivo,tempoRestante,segundosPorReal});return}const adminMap={"!vipadmin":{nivel:1,tempo:300},"!eliteadmin":{nivel:2,tempo:600},"!furiaadmin":{nivel:3,tempo:1800},"!apocalipseadmin":{nivel:4,tempo:3600}};if(adminMap[msg]){const {nivel,tempo}=adminMap[msg];nivelAtivo=nivel;tempoRestante=tempo;if(timer){clearInterval(timer);timer=null}iniciarTimer();atualizarHUD();return}if(msg==="!resetadmin"){nivelAtivo=0;tempoRestante=0;if(timer){clearInterval(timer);timer=null}atualizarHUD();return}}
+window.addEventListener("onEventReceived",function(obj){const listener=obj?.detail?.listener;if(listener==="tip-latest"){const ev=obj.detail.event||{};const valor=parseValor(ev.amount);if(isNaN(valor))return;const bucket=Math.floor(Date.now()/3000);const tipKey=ev._id||ev.id||ev.transactionId||ev.createdAt||`${valor}:${ev.name||ev.username||""}:${bucket}`;if(tipKey&&tipKey===lastTipKey)return;lastTipKey=tipKey;const nivelNovo=nivelPorFaixa(valor);const tempoExtra=Math.floor(valor*segundosPorReal);tempoRestante+=tempoExtra;if(nivelNovo>nivelAtivo)nivelAtivo=nivelNovo;iniciarTimer();atualizarHUD();enviarEstadoPainel();donateQueueValor+=valor;donateQueueCount+=1;donateQueueMaxNivel=Math.max(donateQueueMaxNivel,nivelNovo);if(donateFlushTimer)clearTimeout(donateFlushTimer);donateFlushTimer=setTimeout(()=>{donateQueueValor=0;donateQueueCount=0;donateQueueMaxNivel=0;donateFlushTimer=null},5000);return}
+if(listener!=="message")return;const msg=obj.detail.event.data.text.trim().toLowerCase();const user=obj.detail.event.data.nick.trim().toLowerCase();if(user===ADMIN_NICK){if(msg.startsWith("!setreal ")){const novoValor=parseInt(msg.split(" ")[1],10);if(!isNaN(novoValor)&&novoValor>0){segundosPorReal=novoValor;atualizarHUD()}return}if(msg==="!statusadmin"){atualizarHUD();console.log("[STATUS]",{nivelAtivo,tempoRestante,segundosPorReal});return}const adminMap={"!vipadmin":{nivel:1,tempo:300},"!eliteadmin":{nivel:2,tempo:600},"!furiaadmin":{nivel:3,tempo:1800},"!apocalipseadmin":{nivel:4,tempo:3600}};if(adminMap[msg]){const {nivel,tempo}=adminMap[msg];nivelAtivo=nivel;tempoRestante=tempo;if(timer){clearInterval(timer);timer=null}iniciarTimer();atualizarHUD();enviarEstadoPainel();return}if(msg==="!resetadmin"){nivelAtivo=0;tempoRestante=0;if(timer){clearInterval(timer);timer=null}atualizarHUD();enviarEstadoPainel();return}}
 tocarSomComando(msg)});
 
 function tocarSomComando(msg){const som=sons[msg];if(!som)return;const nivelNecessario=nivelNumero[som.level];if(nivelAtivo<nivelNecessario)return;const now=Date.now();const cdNivel=(cooldownPorNivel[som.level]??10)*1000;const lastNivel=lastPlay.byLevel[som.level]||0;if(now-lastNivel<cdNivel)return;lastPlay.byLevel[som.level]=now;audio.pause();audio.currentTime=0;audio.src=som.url;audio.play().catch(err=>console.warn('[AUDIO]',err))}
 
-(function iniciarControleRemoto(){if(!window.supabase||!window.SB_CONFIG){console.warn('[REMOTE] configuração ausente');return}const client=window.supabase.createClient(SB_CONFIG.SUPABASE_URL,SB_CONFIG.SUPABASE_ANON_KEY);const channel=client.channel(SB_CONFIG.ROOM_ID);channel.on('broadcast',{event:'sound'},payload=>{const command=payload?.payload?.command;if(command&&sons[command])tocarSomComando(command)}).subscribe(status=>console.log('[REMOTE]',status))})();
+let remoteChannel = null;
+let remoteOnline = false;
+
+function enviarEstadoPainel() {
+  if (!remoteChannel || !remoteOnline) return;
+
+  remoteChannel.send({
+    type: "broadcast",
+    event: "state",
+    payload: {
+      nivelAtivo,
+      tempoRestante,
+      timestamp: Date.now()
+    }
+  });
+}
+
+(function iniciarControleRemoto() {
+  if (!window.supabase || !window.SB_CONFIG) {
+    console.warn("[REMOTE] configuração ausente");
+    return;
+  }
+
+  const client = window.supabase.createClient(
+    SB_CONFIG.SUPABASE_URL,
+    SB_CONFIG.SUPABASE_ANON_KEY
+  );
+
+  remoteChannel = client.channel(SB_CONFIG.ROOM_ID);
+
+  remoteChannel
+    .on("broadcast", { event: "sound" }, ({ payload }) => {
+      const command = payload?.command;
+      if (command && sons[command]) {
+        tocarSomComando(command);
+      }
+    })
+    .on("broadcast", { event: "state_request" }, () => {
+      enviarEstadoPainel();
+    })
+    .subscribe(status => {
+      console.log("[REMOTE]", status);
+
+      remoteOnline = status === "SUBSCRIBED";
+
+      if (remoteOnline) {
+        enviarEstadoPainel();
+
+        setInterval(() => {
+          enviarEstadoPainel();
+        }, 5000);
+      }
+    });
+})();
 
 atualizarHUD();
