@@ -7,8 +7,37 @@
 <link rel="stylesheet" href="painel.css">
 </head>
 <body>
-<header><div><h1>🎛️ Soundboard do Caos</h1><p id="status">Conectando...</p></div></header>
+
+<header class="top">
+  <h1>🎛️ Soundboard do Caos</h1>
+  <div id="status" class="status offline">🔴 Offline</div>
+</header>
+
+<section class="info">
+  <h2>🍁 COMO FUNCIONA A SOUNDBOARD 🍁</h2>
+
+  <p>👀 O nível liberado aparece na tela!</p>
+  <p>💬 Digite no chat: <b>!suave !vip !elite !furia !apocalipse</b></p>
+
+  <p>🔥 <b>DOAÇÕES AUMENTAM O TEMPO!</b></p>
+  <p>💰 R$1 = +60 segundos no temporizador da live</p>
+  <p>⭐ SUB = +300 segundos</p>
+
+  <p>⏱️ O tempo é acumulativo!</p>
+  <p>🎵 Além de aumentar o tempo da live, as doações também podem liberar novos níveis da Soundboard!</p>
+
+  <a class="livepix" href="https://livepix.gg/xguiler" target="_blank" rel="noopener">
+    💸 livepix.gg/xguiler
+  </a>
+</section>
+
+<section id="liveInfo" class="live-info">
+  <div class="current-level">LVL <span id="currentLevel">SUAVE</span></div>
+  <div class="current-time">~ <span id="currentTime">∞</span></div>
+</section>
+
 <main id="grid"></main>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="painel.js"></script>
