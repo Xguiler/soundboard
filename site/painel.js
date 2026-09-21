@@ -124,7 +124,7 @@ function renderizarCategorias() {
     if (categoria.level === nivelAtivo && tempoRestante > 0) {
       const time = document.createElement("span");
       time.className = "level-time";
-      time.textContent = "~ " + formatarTempo(tempoRestante);
+      time.textContent = formatarTempo(tempoRestante);
       title.appendChild(time);
     }
 
