@@ -13,27 +13,22 @@
   <div id="status" class="status offline">🔴 Offline</div>
 </header>
 
-<section class="info">
+<button id="infoToggle" class="info-toggle">ℹ️ COMO FUNCIONA</button>
+
+<section id="info" class="info">
   <h2>🍁 COMO FUNCIONA A SOUNDBOARD 🍁</h2>
-   <h2>AINDA TÁ EM TEEEESTE</h2>
-
+  <h2>AINDA TÁ EM TEEEESTE</h2>
   <p>👀 O nível liberado aparece na tela!</p>
-  
   <p>💰 R$1 = +300 segundos no temporizador da live e no SoundBoard</p>
-
   <p>⏱️ O tempo é acumulativo!</p>
   <p>🎵 Além de aumentar o tempo da live, as doações também podem liberar novos níveis da Soundboard!</p>
-
-  <a class="livepix" href="https://livepix.gg/xguiler" target="_blank" rel="noopener">
-    💸 livepix.gg/xguiler
-  </a>
+  <a class="livepix" href="https://livepix.gg/xguiler" target="_blank" rel="noopener">💸 livepix.gg/xguiler</a>
 </section>
 
 <section id="liveInfo" class="live-info">
-  <div id="statusHUD"></div>
-
   <div class="current-level">LVL <span id="currentLevel">SUAVE</span></div>
   <div class="current-time">~ <span id="currentTime">∞</span></div>
+  <div id="cooldownDisplay" class="cooldown ready">🔊 PRONTO PARA TOCAR</div>
 </section>
 
 <main id="grid"></main>
@@ -41,6 +36,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="painel.js"></script>
-  
+
 </body>
 </html>
