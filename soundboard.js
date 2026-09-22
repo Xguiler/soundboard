@@ -26,14 +26,14 @@ const nivelNumero = {
 // COOLDOWN POR NÍVEL
 // ============================
 const cooldownPorNivel = {
-  suave: 3,
-  vip: 3,
-  elite: 3,
-  furia: 3,
+  suave: 15,
+  vip: 10,
+  elite: 8,
+  furia: 7,
   apocalipse: 3
 };
 
-const lastPlay = { byLevel: {} };
+let cooldownAte = 0;
 
 // ============================
 // HUD
@@ -176,10 +176,37 @@ let donateQueueValor=0,donateQueueCount=0,donateQueueMaxNivel=0,donateFlushTimer
 function parseValor(rawAmount){const s=String(rawAmount).replace("R$","").replace(/\s/g,"").replace(",",".");const v=parseFloat(s);return Number.isFinite(v)?v:NaN}
 function nivelPorFaixa(valor){if(valor>=50)return 4;if(valor>=25)return 3;if(valor>=5)return 2;if(valor>=1)return 1;return 0}
 window.addEventListener("onEventReceived",function(obj){const listener=obj?.detail?.listener;if(listener==="tip-latest"){const ev=obj.detail.event||{};const valor=parseValor(ev.amount);if(isNaN(valor))return;const bucket=Math.floor(Date.now()/3000);const tipKey=ev._id||ev.id||ev.transactionId||ev.createdAt||`${valor}:${ev.name||ev.username||""}:${bucket}`;if(tipKey&&tipKey===lastTipKey)return;lastTipKey=tipKey;const nivelNovo=nivelPorFaixa(valor);const tempoExtra=Math.floor(valor*segundosPorReal);tempoRestante+=tempoExtra;if(nivelNovo>nivelAtivo)nivelAtivo=nivelNovo;iniciarTimer();atualizarHUD();enviarEstadoPainel();donateQueueValor+=valor;donateQueueCount+=1;donateQueueMaxNivel=Math.max(donateQueueMaxNivel,nivelNovo);if(donateFlushTimer)clearTimeout(donateFlushTimer);donateFlushTimer=setTimeout(()=>{donateQueueValor=0;donateQueueCount=0;donateQueueMaxNivel=0;donateFlushTimer=null},5000);return}
-if(listener!=="message")return;const msg=obj.detail.event.data.text.trim().toLowerCase();const user=obj.detail.event.data.nick.trim().toLowerCase();if(user===ADMIN_NICK){if(msg.startsWith("!setreal ")){const novoValor=parseInt(msg.split(" ")[1],10);if(!isNaN(novoValor)&&novoValor>0){segundosPorReal=novoValor;atualizarHUD();enviarEstadoPainel()}return}if(msg==="!statusadmin"){atualizarHUD();console.log("[STATUS]",{nivelAtivo,tempoRestante,segundosPorReal});return}const adminMap={"!vipadmin":{nivel:1,tempo:300},"!eliteadmin":{nivel:2,tempo:600},"!furiaadmin":{nivel:3,tempo:1800},"!apocalipseadmin":{nivel:4,tempo:3600}};if(adminMap[msg]){const {nivel,tempo}=adminMap[msg];nivelAtivo=nivel;tempoRestante=tempo;if(timer){clearInterval(timer);timer=null}iniciarTimer();atualizarHUD();enviarEstadoPainel();setTimeout(enviarEstadoPainel,300);setTimeout(enviarEstadoPainel,1000);return}if(msg==="!resetadmin"){nivelAtivo=0;tempoRestante=0;if(timer){clearInterval(timer);timer=null}atualizarHUD();enviarEstadoPainel();setTimeout(enviarEstadoPainel,300);setTimeout(enviarEstadoPainel,1000);return}}
+if(listener!=="message")return;const msg=obj.detail.event.data.text.trim().toLowerCase();const user=obj.detail.event.data.nick.trim().toLowerCase();if(user===ADMIN_NICK){if(msg.startsWith("!setreal ")){const novoValor=parseInt(msg.split(" ")[1],10);if(!isNaN(novoValor)&&novoValor>0){segundosPorReal=novoValor;atualizarHUD();enviarEstadoPainel()}return}if(msg==="!statusadmin"){atualizarHUD();console.log("[STATUS]",{nivelAtivo,tempoRestante,segundosPorReal});return}const adminMap={"!vipadmin":{nivel:1,tempo:300},"!eliteadmin":{nivel:2,tempo:600},"!furiaadmin":{nivel:3,tempo:1800},"!apocalipseadmin":{nivel:4,tempo:3600}};if(adminMap[msg]){const {nivel,tempo}=adminMap[msg];nivelAtivo=nivel;tempoRestante=tempo;cooldownAte=0;if(timer){clearInterval(timer);timer=null}iniciarTimer();atualizarHUD();enviarEstadoPainel();setTimeout(enviarEstadoPainel,300);setTimeout(enviarEstadoPainel,1000);return}if(msg==="!resetadmin"){nivelAtivo=0;tempoRestante=0;cooldownAte=0;if(timer){clearInterval(timer);timer=null}atualizarHUD();enviarEstadoPainel();setTimeout(enviarEstadoPainel,300);setTimeout(enviarEstadoPainel,1000);return}}
 tocarSomComando(msg)});
 
-function tocarSomComando(msg){const som=sons[msg];if(!som)return;const nivelNecessario=nivelNumero[som.level];if(nivelAtivo<nivelNecessario)return;const now=Date.now();const cdNivel=(cooldownPorNivel[som.level]??10)*1000;const lastNivel=lastPlay.byLevel[som.level]||0;if(now-lastNivel<cdNivel)return;lastPlay.byLevel[som.level]=now;audio.pause();audio.currentTime=0;audio.src=som.url;audio.play().catch(err=>console.warn('[AUDIO]',err))}
+function getCooldownAtual() {
+  const nomes = ["suave", "vip", "elite", "furia", "apocalipse"];
+  return (cooldownPorNivel[nomes[nivelAtivo]] ?? 15) * 1000;
+}
+
+function tocarSomComando(msg){
+  const som=sons[msg];
+  if(!som)return false;
+
+  const nivelNecessario=nivelNumero[som.level];
+  if(nivelAtivo<nivelNecessario)return false;
+
+  const now=Date.now();
+  if(now<cooldownAte){
+    return false;
+  }
+
+  cooldownAte=now+getCooldownAtual();
+
+  audio.pause();
+  audio.currentTime=0;
+  audio.src=som.url;
+  audio.play().catch(err=>console.warn('[AUDIO]',err));
+
+  atualizarHUD();
+  enviarEstadoPainel();
+  return true;
+}
 
 let remoteChannel = null;
 let remoteOnline = false;
@@ -193,6 +220,8 @@ function enviarEstadoPainel() {
     payload: {
       nivelAtivo,
       tempoRestante,
+      cooldownAte,
+      cooldownRestante: Math.max(0, Math.ceil((cooldownAte - Date.now()) / 1000)),
       timestamp: Date.now()
     }
   }).catch(err => console.warn("[REMOTE] erro ao enviar estado:", err));
