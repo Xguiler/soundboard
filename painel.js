@@ -47,7 +47,7 @@ function cooldownDoNivel() {
 
 function atualizarCabecalho() {
   currentLevel.textContent=nomeNivel(nivelAtivo);
-  currentTime.textContent=tempoRestante>0 ? formatarTempo(tempoRestante) : "♾️♾️♾️♾️";
+  currentTime.textContent=restante>0 ? restante+"s" : "PRONTO";
 
   const restante=Math.max(0,Math.ceil((cooldownAte-Date.now())/1000));
   cooldownRestante=restante;
