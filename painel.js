@@ -10,9 +10,6 @@ const COOLDOWN_POR_NIVEL = [15,10,8,7,3];
 
 const status = document.getElementById("status");
 const grid = document.getElementById("grid");
-const currentLevel = document.getElementById("currentLevel");
-const currentTime = document.getElementById("currentTime");
-const cooldownDisplay = document.getElementById("cooldownDisplay");
 const infoToggle = document.getElementById("infoToggle");
 const info = document.getElementById("info");
 
@@ -46,17 +43,8 @@ function cooldownDoNivel() {
 }
 
 function atualizarCabecalho() {
-  currentLevel.textContent=nomeNivel(nivelAtivo);
-
   const restante=Math.max(0,Math.ceil((cooldownAte-Date.now())/1000));
   cooldownRestante=restante;
-
-  currentTime.textContent=restante>0 ? restante+"s" : "PRONTO";
-
-  if(cooldownDisplay){
-    cooldownDisplay.textContent=restante>0 ? "⏳ Próximo som em "+restante+"s" : "🔊 PRONTO PARA TOCAR";
-    cooldownDisplay.className=restante>0 ? "cooldown active" : "cooldown ready";
-  }
 }
 
 function renderizarCategorias() {
@@ -72,11 +60,17 @@ function renderizarCategorias() {
     titleText.textContent=categoria.label;
     title.appendChild(titleText);
 
-    if(categoria.level===nivelAtivo && tempoRestante>0){
+    if(categoria.level===nivelAtivo){
       const time=document.createElement("span");
       time.className="level-time";
       time.textContent="~ "+formatarTempo(tempoRestante);
       title.appendChild(time);
+
+      const cooldown=document.createElement("span");
+      const restante=Math.max(0,Math.ceil((cooldownAte-Date.now())/1000));
+      cooldown.className=restante>0 ? "level-cooldown active" : "level-cooldown ready";
+      cooldown.textContent=restante>0 ? "⏳ "+restante+"s" : "🔊 PRONTO";
+      title.appendChild(cooldown);
     }
 
     section.appendChild(title);
