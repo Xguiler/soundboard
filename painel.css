@@ -111,6 +111,9 @@ h1{margin:0;font-size:28px;font-weight:900}
   font-weight:900;
 }
 .level-time{color:#c88cff;font-size:15px}
+.level-cooldown{font-size:14px;padding:3px 8px;border-radius:7px}
+.level-cooldown.active{color:#ffd34d;background:rgba(255,180,0,.08)}
+.level-cooldown.ready{color:#55ff88;background:rgba(0,255,100,.06)}
 
 .buttons{
   display:grid;
