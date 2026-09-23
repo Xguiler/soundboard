@@ -164,7 +164,15 @@ channel
       status.className="status offline";
     }
   });
-
+.on(
+  "broadcast",
+  { event: "state" },
+  ({ payload }) => {
+      // atualizar nível
+      // atualizar tempo
+      // liberar/bloquear sons
+  }
+)
 if(infoToggle){
   infoToggle.addEventListener("click",()=>{
     const aberto=info.classList.toggle("open");
