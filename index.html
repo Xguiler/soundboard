@@ -1,1 +1,48 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8"><link rel="stylesheet" href="style.css"></head><body><div id="statusHUD"></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script><script src="soundboard.js"></script><script src="remote.js"></script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Soundboard do Caos</title>
+<link rel="stylesheet" href="painel.css">
+</head>
+<body>
+
+<header class="top">
+  <h1>🎛️ Soundboard do Caos</h1>
+  <div id="status" class="status offline">🔴 Offline</div>
+</header>
+
+<button id="infoToggle" class="info-toggle">ℹ️ COMO FUNCIONA</button>
+
+<section id="info" class="info">
+  <h2>🍁 COMO FUNCIONA A SOUNDBOARD 🍁</h2>
+  <h2>⚠️ AINDA TÁ EM TEEEESTE</h2>
+  <p>👀 O <strong>nível liberado aparece na tela</strong> durante a live!</p>
+  <p>💰 O valor de cada doação define o nível liberado:</p>
+  <p>🟣 <strong>R$1,00 a R$4,99</strong> → VIP</p>
+  <p>🔵 <strong>R$5,00 a R$24,99</strong> → ELITE</p>
+  <p>🟠 <strong>R$25,00 a R$49,99</strong> → FÚRIA</p>
+  <p>🔴 <strong>R$50,00 ou mais</strong> → APOCALIPSE</p>
+  <p>⏱️ Cada doação também adiciona tempo ao temporizador da live, e o tempo é <strong>acumulativo</strong>!</p>
+  <p>🎵 <strong>Doações maiores liberam níveis com mais sons disponíveis.</strong></p>
+  <p>🎵 <strong>MANDE SEU SOM!</strong></p>
+  <a class="livepix" href="https://livepix.gg/xguiler" target="_blank" rel="noopener">💸 APOIAR PELO LIVEPIX</a>
+  <p>Tem um som que combina com a live? Manda sua sugestão pelo nosso bot no Telegram!</p>
+  <p>👀 As sugestões são analisadas antes de entrarem na Soundboard.</p>
+  <a class="telegram" href="https://t.me/XguilerSoundBoard_bot" target="_blank" rel="noopener">🤖 ENVIAR SUGESTÃO</a>
+</section>
+
+<section id="liveInfo" class="live-info">
+  <div class="current-level">LVL <span id="currentLevel">SUAVE</span></div>
+  <div class="current-time">~ <span id="currentTime">∞</span></div>
+  <div id="cooldownDisplay" class="cooldown ready">🔊 PRONTO PARA TOCAR</div>
+</section>
+
+<main id="grid"></main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="painel.js"></script>
+</body>
+</html>
