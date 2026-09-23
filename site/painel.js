@@ -192,13 +192,3 @@ setInterval(()=>{
 
 atualizarCabecalho();
 renderizarCategorias();
-
-.on(
-  "broadcast",
-  { event: "state" },
-  ({ payload }) => {
-      // atualizar nível
-      // atualizar tempo
-      // liberar/bloquear sons
-  }
-)
