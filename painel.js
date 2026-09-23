@@ -60,18 +60,18 @@ function renderizarCategorias() {
     titleText.textContent=categoria.label;
     title.appendChild(titleText);
 
-    if(categoria.level===nivelAtivo){
-      const time=document.createElement("span");
-      time.className="level-time";
-      time.textContent="~ "+formatarTempo(tempoRestante);
-      title.appendChild(time);
+    // O tempo e o cooldown são globais da Soundboard,
+    // então aparecem em todos os níveis visíveis.
+    const time=document.createElement("span");
+    time.className="level-time";
+    time.textContent="~ "+formatarTempo(tempoRestante);
+    title.appendChild(time);
 
-      const cooldown=document.createElement("span");
-      const restante=Math.max(0,Math.ceil((cooldownAte-Date.now())/1000));
-      cooldown.className=restante>0 ? "level-cooldown active" : "level-cooldown ready";
-      cooldown.textContent=restante>0 ? "⏳ "+restante+"s" : "🔊 PRONTO";
-      title.appendChild(cooldown);
-    }
+    const cooldown=document.createElement("span");
+    const restante=Math.max(0,Math.ceil((cooldownAte-Date.now())/1000));
+    cooldown.className=restante>0 ? "level-cooldown active" : "level-cooldown ready";
+    cooldown.textContent=restante>0 ? "⏳ "+restante+"s" : "🔊 PRONTO";
+    title.appendChild(cooldown);
 
     section.appendChild(title);
 
