@@ -47,10 +47,11 @@ function cooldownDoNivel() {
 
 function atualizarCabecalho() {
   currentLevel.textContent=nomeNivel(nivelAtivo);
-  currentTime.textContent=restante>0 ? restante+"s" : "PRONTO";
 
   const restante=Math.max(0,Math.ceil((cooldownAte-Date.now())/1000));
   cooldownRestante=restante;
+
+  currentTime.textContent=restante>0 ? restante+"s" : "PRONTO";
 
   if(cooldownDisplay){
     cooldownDisplay.textContent=restante>0 ? "⏳ Próximo som em "+restante+"s" : "🔊 PRONTO PARA TOCAR";
