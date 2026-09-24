@@ -103,14 +103,20 @@ h1{margin:0;font-size:28px;font-weight:900}
 
 .level{margin:14px 0 18px}
 .level-title{
-  display:flex;
+  display:grid;
+  grid-template-columns:75px 1fr 75px;
   align-items:center;
-  justify-content:center;
-  gap:8px;
+  width:100%;
   margin-bottom:9px;
   font-size:18px;
   font-weight:900;
 }
+.level-title > *:first-child{justify-self:start}
+.level-title > span:not(.level-time):not(.level-cooldown){justify-self:center}
+.level-title .level-time,
+.level-title .level-cooldown{justify-self:center}
+.level-title .logo-xguiler{justify-self:end;margin-left:0}
+.level-title .nova-imagem{justify-self:start;margin-right:0}
 .level-time{color:#c88cff;font-size:15px}
 .level-cooldown{font-size:14px;padding:3px 8px;border-radius:7px}
 .level-cooldown.active{color:#ffd34d;background:rgba(255,180,0,.08)}
@@ -158,5 +164,4 @@ button:disabled{opacity:.38;cursor:not-allowed}
 }
 
 .logo-xguiler{width:75px;height:auto;display:block}
-.level-title .logo-xguiler{margin-left:14px}
 .nova-imagem{width:75px;height:42px;object-fit:contain;display:block;margin-right:2px}
