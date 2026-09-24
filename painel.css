@@ -155,3 +155,10 @@ button:disabled{opacity:.38;cursor:not-allowed}
   .buttons{grid-template-columns:repeat(2,1fr);gap:7px}
   button:not(.info-toggle){min-height:54px}
 }
+
+.logo-xguiler {
+    width: 260px;
+    height: auto;
+    display: block;
+    margin: 0 auto 15px;
+}
