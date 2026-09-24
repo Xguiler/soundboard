@@ -73,6 +73,14 @@ function renderizarCategorias() {
     cooldown.textContent=restante>0 ? "⏳ "+restante+"s" : "🔊 PRONTO";
     title.appendChild(cooldown);
 
+    if(categoria.level===0){
+      const logo=document.createElement("img");
+      logo.src="logo-xguiler.png";
+      logo.className="logo-xguiler";
+      logo.alt="Xguiler na Twitch";
+      title.appendChild(logo);
+    }
+
     section.appendChild(title);
 
     const buttons=document.createElement("div");
