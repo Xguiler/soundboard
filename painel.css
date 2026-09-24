@@ -21,13 +21,13 @@ h1{margin:0;font-size:28px;font-weight:900}
   max-width:760px;
   margin:0 auto 10px;
   display:grid;
-  grid-template-columns:75px 1fr 75px;
+  grid-template-columns:150px 1fr 150px;
   align-items:center;
   justify-items:center;
 }
 .side-logo{
-  width:75px;
-  height:75px;
+  width:150px;
+  height:150px;
   object-fit:contain;
 }
 .left-logo{justify-self:start}
