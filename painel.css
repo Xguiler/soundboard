@@ -157,5 +157,6 @@ button:disabled{opacity:.38;cursor:not-allowed}
   button:not(.info-toggle){min-height:54px}
 }
 
-.logo-xguiler{width:120px;height:auto;display:block}
-.level-title .logo-xguiler{margin-left:24px}
+.logo-xguiler{width:75px;height:auto;display:block}
+.level-title .logo-xguiler{margin-left:14px}
+.nova-imagem{width:42px;height:42px;object-fit:contain;display:block;margin-right:2px}
