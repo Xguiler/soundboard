@@ -56,14 +56,6 @@ function renderizarCategorias() {
     const title=document.createElement("div");
     title.className="level-title";
 
-    if(categoria.level===0){
-      const novaImagem=document.createElement("img");
-      novaImagem.src="elovava.png?v=2";
-      novaImagem.className="nova-imagem";
-      novaImagem.alt="Elovava";
-      title.appendChild(novaImagem);
-    }
-
     const titleText=document.createElement("span");
     titleText.textContent=categoria.label;
     title.appendChild(titleText);
@@ -80,14 +72,6 @@ function renderizarCategorias() {
     cooldown.className=restante>0 ? "level-cooldown active" : "level-cooldown ready";
     cooldown.textContent=restante>0 ? "⏳ "+restante+"s" : "🔊 PRONTO";
     title.appendChild(cooldown);
-
-    if(categoria.level===0){
-      const logo=document.createElement("img");
-      logo.src="logo-xguiler.png";
-      logo.className="logo-xguiler";
-      logo.alt="Xguiler na Twitch";
-      title.appendChild(logo);
-    }
 
     section.appendChild(title);
 
