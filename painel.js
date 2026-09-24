@@ -56,17 +56,17 @@ function renderizarCategorias() {
     const title=document.createElement("div");
     title.className="level-title";
 
-    const titleText=document.createElement("span");
-    titleText.textContent=categoria.label;
-    title.appendChild(titleText);
-
     if(categoria.level===0){
       const novaImagem=document.createElement("img");
-      novaImagem.src="elovava.png";
+      novaImagem.src="elovava.png?v=2";
       novaImagem.className="nova-imagem";
       novaImagem.alt="Elovava";
       title.appendChild(novaImagem);
     }
+
+    const titleText=document.createElement("span");
+    titleText.textContent=categoria.label;
+    title.appendChild(titleText);
 
     // O tempo e o cooldown são globais da Soundboard,
     // então aparecem em todos os níveis visíveis.
