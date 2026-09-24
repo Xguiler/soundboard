@@ -7,20 +7,16 @@
 <link rel="stylesheet" href="painel.css">
 </head>
 <body>
-<div class="info-bar">
-  <img src="elovava.png?v=2" class="side-logo left-logo" alt="Elovava">
-  <img src="logo-xguiler.png" class="side-logo right-logo" alt="Xguiler na Twitch">
-</div>
-
 <header class="top">
   <h1>Soundboard do Caos</h1>
-  <div class="status-row">
-    <div id="status" class="status offline">🔴 Offline</div>
-  </div>
 </header>
 
 <div class="info-button-row">
   <button id="infoToggle" class="info-toggle">ℹ️ COMO FUNCIONA</button>
+</div>
+
+<div class="status-row">
+  <div id="status" class="status offline">🔴 Offline</div>
 </div>
 
 <section id="info" class="info">
@@ -42,6 +38,11 @@
 </section>
 
 <main id="grid"></main>
+
+<footer class="logos-footer">
+  <img src="elovava.png?v=2" class="footer-logo" alt="Elovava">
+  <img src="logo-xguiler.png" class="footer-logo" alt="Xguiler na Twitch">
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
