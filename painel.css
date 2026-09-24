@@ -21,7 +21,7 @@ h1{margin:0;font-size:28px;font-weight:900}
   max-width:760px;
   margin:0 auto 10px;
   display:grid;
-  grid-template-columns:150px 1fr 150px;
+  grid-template-columns:110px 1fr 110px;
   align-items:center;
   justify-items:center;
 }
@@ -30,8 +30,8 @@ h1{margin:0;font-size:28px;font-weight:900}
   height:150px;
   object-fit:contain;
 }
-.left-logo{justify-self:start}
-.right-logo{justify-self:end}
+.left-logo{justify-self:end}
+.right-logo{justify-self:start}
 
 .info-toggle{
   display:block;
