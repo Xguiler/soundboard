@@ -19,12 +19,25 @@ h1{margin:0;font-size:28px;font-weight:900}
 
 .info-bar{
   max-width:760px;
-  height:160px;
+  height:250px;
   margin:0 auto 10px;
   position:relative;
   display:flex;
   align-items:flex-end;
   justify-content:center;
+}
+.info-bar .top{
+  position:absolute;
+  top:150px;
+  left:0;
+  right:0;
+  padding:0 16px 4px;
+}
+.info-bar .info-toggle{
+  position:absolute;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
 }
 .side-logo{
   position:absolute;
