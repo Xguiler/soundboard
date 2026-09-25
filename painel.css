@@ -151,23 +151,6 @@ button:disabled{opacity:.38;cursor:not-allowed}
 
 .empty{text-align:center;color:#888;padding:25px}
 
-.logos-footer{
-  max-width:760px;
-  margin:0 auto;
-  padding:10px 16px 30px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:20px;
-}
-
-.footer-logo{
-  width:150px;
-  height:150px;
-  object-fit:contain;
-  flex:0 0 150px;
-}
-
 @media(max-width:600px){
   h1{font-size:23px}
   .info{margin-left:10px;margin-right:10px;padding:15px}
@@ -175,6 +158,4 @@ button:disabled{opacity:.38;cursor:not-allowed}
   #grid{padding:0 10px 25px}
   .buttons{grid-template-columns:repeat(2,1fr);gap:7px}
   button:not(.info-toggle){min-height:54px}
-  .logos-footer{gap:10px;padding-bottom:25px}
-  .footer-logo{width:120px;height:120px;flex-basis:120px}
 }
