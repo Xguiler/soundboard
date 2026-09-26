@@ -11,8 +11,8 @@ body{
 .top{padding:16px 16px 10px;text-align:center}
 .soundboard-logo{
   display:block;
-  width:min(700px,92vw);
-  max-height:170px;
+  width:min(800px,96vw);
+  max-height:210px;
   height:auto;
   object-fit:contain;
   margin:0 auto;
@@ -159,8 +159,8 @@ button:disabled{opacity:.38;cursor:not-allowed}
 .empty{text-align:center;color:#888;padding:25px}
 
 @media(max-width:600px){
-  .top{padding:12px 10px 8px}
-  .soundboard-logo{width:96vw;max-height:125px}
+  .top{padding:12px 8px 8px}
+  .soundboard-logo{width:98vw;max-height:150px}
   .info{margin-left:10px;margin-right:10px;padding:15px}
   .info p{font-size:13px}
   #grid{padding:0 10px 25px}
