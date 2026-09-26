@@ -12,6 +12,9 @@ const status = document.getElementById("status");
 const grid = document.getElementById("grid");
 const infoToggle = document.getElementById("infoToggle");
 const info = document.getElementById("info");
+const totalVisitsEl = document.getElementById("totalVisits");
+const onlineNowEl = document.getElementById("onlineNow");
+const peakOnlineEl = document.getElementById("peakOnline");
 
 const client = supabase.createClient(SB_CONFIG.SUPABASE_URL, SB_CONFIG.SUPABASE_ANON_KEY);
 const channel = client.channel(SB_CONFIG.ROOM_ID);
@@ -23,6 +26,64 @@ let cooldownAte = 0;
 let ultimaAtualizacao = 0;
 let liveOnline = false;
 let ultimoEstadoTimestamp = 0;
+
+const VISITOR_ID_KEY = "xguiler_soundboard_visitor_id";
+
+function obterVisitorId() {
+  let id = localStorage.getItem(VISITOR_ID_KEY);
+
+  if(!id){
+    if(window.crypto && crypto.randomUUID){
+      id=crypto.randomUUID();
+    }else{
+      id="v-"+Date.now()+"-"+Math.random().toString(36).slice(2);
+    }
+
+    localStorage.setItem(VISITOR_ID_KEY,id);
+  }
+
+  return id;
+}
+
+function atualizarStatsUI(stats) {
+  if(!stats)return;
+
+  if(totalVisitsEl) totalVisitsEl.textContent=Number(stats.total_visits||0).toLocaleString("pt-BR");
+  if(onlineNowEl) onlineNowEl.textContent=Number(stats.online||0).toLocaleString("pt-BR");
+  if(peakOnlineEl) peakOnlineEl.textContent=Number(stats.peak_online||0).toLocaleString("pt-BR");
+}
+
+async function registrarVisita() {
+  try{
+    const visitorId=obterVisitorId();
+
+    const {data,error}=await client.rpc("register_site_visit",{
+      p_visitor_id:visitorId
+    });
+
+    if(error) throw error;
+
+    atualizarStatsUI(data);
+  }catch(error){
+    console.error("Erro ao registrar visita:",error);
+  }
+}
+
+async function enviarHeartbeat() {
+  try{
+    const visitorId=obterVisitorId();
+
+    const {data,error}=await client.rpc("heartbeat_site_visitor",{
+      p_visitor_id:visitorId
+    });
+
+    if(error) throw error;
+
+    atualizarStatsUI(data);
+  }catch(error){
+    console.error("Erro no heartbeat:",error);
+  }
+}
 
 function formatarTempo(segundos) {
   if (!Number.isFinite(segundos) || segundos <= 0) return "∞";
@@ -132,7 +193,6 @@ function aplicarEstado(payload) {
   tempoRestante=Math.max(0,Number(payload.tempoRestante)||0);
   cooldownAte=Math.max(0,Number(payload.cooldownAte)||0);
 
-  // Compatibilidade com estados antigos.
   if(!cooldownAte && Number(payload.cooldownRestante)>0){
     cooldownAte=Date.now()+Number(payload.cooldownRestante)*1000;
   }
@@ -159,6 +219,7 @@ channel
       status.className="status offline";
     }
   });
+
 if(infoToggle){
   infoToggle.addEventListener("click",()=>{
     const aberto=info.classList.toggle("open");
@@ -184,6 +245,10 @@ setInterval(()=>{
     status.className="status offline";
   }
 },2000);
+
+registrarVisita();
+enviarHeartbeat();
+setInterval(enviarHeartbeat,10000);
 
 atualizarCabecalho();
 renderizarCategorias();
