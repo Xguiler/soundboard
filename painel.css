@@ -109,7 +109,29 @@ body{
 
 .current-time + .cooldown{margin-left:4px}
 
-#grid{max-width:1100px;margin:0 auto;padding:0 16px 30px}
+.site-stats{
+  max-width:1100px;
+  margin:0 auto;
+  padding:0 16px 28px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+  color:#888;
+  font-size:13px;
+  font-weight:700;
+}
+.site-stats span{
+  padding:5px 9px;
+  border:1px solid rgba(80,80,95,.45);
+  border-radius:8px;
+  background:rgba(10,10,14,.45);
+}
+.site-stats span:nth-child(2){color:#55ff88}
+.site-stats strong{color:#ddd}
+
+#grid{max-width:1100px;margin:0 auto;padding:0 16px 18px}
 
 .level{margin:14px 0 18px}
 .level-title{
@@ -163,7 +185,8 @@ button:disabled{opacity:.38;cursor:not-allowed}
   .soundboard-logo{width:98vw;max-height:150px}
   .info{margin-left:10px;margin-right:10px;padding:15px}
   .info p{font-size:13px}
-  #grid{padding:0 10px 25px}
+  #grid{padding:0 10px 15px}
   .buttons{grid-template-columns:repeat(2,1fr);gap:7px}
   button:not(.info-toggle){min-height:54px}
+  .site-stats{padding-left:10px;padding-right:10px}
 }
