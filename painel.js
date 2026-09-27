@@ -15,6 +15,7 @@ const info = document.getElementById("info");
 const totalVisitsEl = document.getElementById("totalVisits");
 const onlineNowEl = document.getElementById("onlineNow");
 const peakOnlineEl = document.getElementById("peakOnline");
+const randomButton = document.getElementById("randomButton");
 
 const client = supabase.createClient(SB_CONFIG.SUPABASE_URL, SB_CONFIG.SUPABASE_ANON_KEY);
 const channel = client.channel(SB_CONFIG.ROOM_ID);
@@ -180,6 +181,48 @@ function renderizarCategorias() {
   }else{
     grid.classList.remove("cooldown-active");
   }
+}
+
+async function tocarRandom() {
+  if(Date.now()<cooldownAte){
+    atualizarCabecalho();
+    renderizarCategorias();
+    return;
+  }
+
+  const sonsDisponiveis=CATEGORIAS
+    .filter(categoria=>categoria.level<=nivelAtivo)
+    .flatMap(categoria=>categoria.sons);
+
+  if(!sonsDisponiveis.length)return;
+
+  const command=sonsDisponiveis[
+    Math.floor(Math.random()*sonsDisponiveis.length)
+  ];
+
+  randomButton.disabled=true;
+
+  const result=await channel.send({
+    type:"broadcast",
+    event:"sound",
+    payload:{command}
+  });
+
+  if(result!=="ok"){
+    status.textContent="🔴 Erro ao enviar";
+    status.className="status offline";
+    randomButton.disabled=false;
+    return;
+  }
+
+  setTimeout(()=>{
+    randomButton.disabled=false;
+    renderizarCategorias();
+  },150);
+}
+
+if(randomButton){
+  randomButton.addEventListener("click",tocarRandom);
 }
 
 function aplicarEstado(payload) {
