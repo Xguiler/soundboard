@@ -52,6 +52,7 @@ let cooldownAte = 0;
 let ultimaAtualizacao = 0;
 let liveOnline = false;
 let ultimoEstadoTimestamp = 0;
+let canalPronto = false;
 
 const VISITOR_ID_KEY = "xguiler_soundboard_visitor_id";
 
@@ -170,6 +171,12 @@ function renderizarCategorias() {
       button.textContent=command;
 
       button.onclick=async()=>{
+        if(!canalPronto){
+          status.textContent="🟡 Conectando...";
+          status.className="status waiting";
+          return;
+        }
+
         if(Date.now()<cooldownAte){
           atualizarCabecalho();
           renderizarCategorias();
@@ -218,6 +225,12 @@ function renderizarCategorias() {
 }
 
 async function tocarRandom() {
+  if(!canalPronto){
+    status.textContent="🟡 Conectando...";
+    status.className="status waiting";
+    return;
+  }
+
   if(Date.now()<cooldownAte){
     atualizarCabecalho();
     renderizarCategorias();
@@ -296,10 +309,12 @@ channel
   .on("broadcast",{event:"state"},({payload})=>aplicarEstado(payload))
   .subscribe(async state=>{
     if(state==="SUBSCRIBED"){
+      canalPronto=true;
       status.textContent="🟡 Aguardando live...";
       status.className="status waiting";
       await channel.send({type:"broadcast",event:"state_request",payload:{}});
     }else{
+      canalPronto=false;
       liveOnline=false;
       status.textContent="🔴 Offline";
       status.className="status offline";
