@@ -178,14 +178,23 @@ function renderizarCategorias() {
 
         button.disabled=true;
 
-        const result=await channel.send({
-          type:"broadcast",
-          event:"sound",
-          payload:{command}
-        });
+        try {
+          const result=await channel.send({
+            type:"broadcast",
+            event:"sound",
+            payload:{command}
+          });
 
-        if(result!=="ok"){
-          status.textContent="🔴 Erro ao enviar";
+          if(result!=="ok"){
+            console.error("[SOUNDBOARD] channel.send retornou:", result);
+            status.textContent="🔴 Erro: "+(typeof result==="string" ? result : JSON.stringify(result));
+            status.className="status offline";
+            button.disabled=false;
+            return;
+          }
+        } catch(error) {
+          console.error("[SOUNDBOARD] erro no envio:", error);
+          status.textContent="🔴 Erro: "+(error?.message || String(error));
           status.className="status offline";
           button.disabled=false;
           return;
@@ -227,14 +236,23 @@ async function tocarRandom() {
 
   randomButton.disabled=true;
 
-  const result=await channel.send({
-    type:"broadcast",
-    event:"sound",
-    payload:{command}
-  });
+  try {
+    const result=await channel.send({
+      type:"broadcast",
+      event:"sound",
+      payload:{command}
+    });
 
-  if(result!=="ok"){
-    status.textContent="🔴 Erro ao enviar";
+    if(result!=="ok"){
+      console.error("[SOUNDBOARD] random channel.send retornou:", result);
+      status.textContent="🔴 Erro: "+(typeof result==="string" ? result : JSON.stringify(result));
+      status.className="status offline";
+      randomButton.disabled=false;
+      return;
+    }
+  } catch(error) {
+    console.error("[SOUNDBOARD] erro no random:", error);
+    status.textContent="🔴 Erro: "+(error?.message || String(error));
     status.className="status offline";
     randomButton.disabled=false;
     return;
