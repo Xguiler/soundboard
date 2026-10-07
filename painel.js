@@ -1,10 +1,35 @@
-const CATEGORIAS = [
-  { key:"suave", label:"🟢 SUAVE", level:0, sons:["!peido","!peido2","!peido3","!peidofunk","!madeira","!cavalo","!undaia","!elegosta","!ui","!tome","!fart","!raze","!defuse","!plant","!chamber","!gekko","!dancagatinho","!qissomeufilho","!derrame","!pare","!fah","!vineboom","!rizz","!among","!aiqdlc","!bigfa","!brbr","!calado","!pix"] },
-  { key:"vip", label:"🟣 VIP", level:1, sons:["!brutal","!falei","!oruam","!freio","!cebolinha2","!wow2","!wow","!dexter","!nemesis","!brass","!indian","!ack","!heehee","!donald","!engracado","!gordo","!aura","!ego","!gripada","!moreno","!lavando","!obrigado","!ui2","!movie","!sentimento","!fail"] },
-  { key:"elite", label:"🔵 ELITE", level:2, sons:["!auuu","!like","!cooked","!wnd","!rapazes","!kiko","!motivacional","!cr7","!gay","!problema","!escolhido","!cachorro","!pain","!tmp","!spider","!file","!heroi","!naosobrou","!chuva","!monark","!fart2","!pablo","!velhos","!ferrei"] },
-  { key:"furia", label:"🟠 FÚRIA", level:3, sons:["!risada","!miauu","!bolso","!cebolinha","!grr","!lutador","!prowler","!jojo","!porra","!heart","!caganeira","!galinha","!mendigo","!ai","!tira","!longfart","!vagabunda","!tobias","!deg","!maconha","!calaboca"] },
-  { key:"apocalipse", label:"🔴 APOCALIPSE", level:4, sons:["!tuntun","!zap","!rojao","!pou","!sigma","!copao","!susto","!dolly","!iphone","!plantao","!corinthians","!galaxy","!mensagem","!scream","!gmidao","!acorda","!vasco","!danone"] }
+let CATEGORIAS = [];
+const NIVEIS = [
+  { key:"suave", label:"🟢 SUAVE", level:0 },
+  { key:"vip", label:"🟣 VIP", level:1 },
+  { key:"elite", label:"🔵 ELITE", level:2 },
+  { key:"furia", label:"🟠 FÚRIA", level:3 },
+  { key:"apocalipse", label:"🔴 APOCALIPSE", level:4 }
 ];
+
+async function carregarCatalogo() {
+  try {
+    const resposta = await fetch("https://xguiler.github.io/soundboard/sons.json?v=" + Date.now());
+    if (!resposta.ok) throw new Error("HTTP " + resposta.status);
+
+    const catalogo = await resposta.json();
+
+    CATEGORIAS = NIVEIS.map(nivel => ({
+      ...nivel,
+      sons: Object.entries(catalogo)
+        .filter(([command, som]) => som && som.level === nivel.key)
+        .map(([command]) => command)
+    })).filter(categoria => categoria.sons.length);
+
+    renderizarCategorias();
+  } catch (erro) {
+    console.error("[CATALOGO] erro ao carregar sons.json:", erro);
+    status.textContent = "🔴 Erro no catálogo";
+    status.className = "status offline";
+  }
+}
+
+
 
 const COOLDOWN_POR_NIVEL = [15,10,8,7,3];
 
