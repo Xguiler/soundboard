@@ -1,4 +1,8 @@
 {
+  "!aiqdlc": {
+    "url": "https://www.myinstants.com/media/sounds/ai-que-delicia-mickey.mp3",
+    "level": "suave"
+  },
   "!peido": {
     "url": "https://www.myinstants.com/media/sounds/audio2_1.mp3",
     "level": "suave",
@@ -104,10 +108,6 @@
   },
   "!among": {
     "url": "https://www.myinstants.com/media/sounds/among-us-role-reveal-sound.mp3",
-    "level": "vip"
-  },
-  "!aiqdlc": {
-    "url": "https://www.myinstants.com/media/sounds/ai-que-delicia-mickey.mp3",
     "level": "vip"
   },
   "!bigfa": {
