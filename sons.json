@@ -14,43 +14,12 @@
     "level": "suave",
     "cooldown": 1
   },
-  "!peidofunk": {
-    "url": "https://www.myinstants.com/media/sounds/peido-funk-som.mp3",
-    "level": "suave",
-    "cooldown": 1
-  },
-  "!madeira": {
-    "url": "https://www.myinstants.com/media/sounds/tu-quer-madeira.mp3",
-    "level": "suave",
-    "cooldown": 10
-  },
   "!cavalo": {
     "url": "https://www.myinstants.com/media/sounds/cavalo.mp3",
     "level": "suave"
   },
-  "!undaia": {
-    "url": "https://www.myinstants.com/media/sounds/undaia-meme.mp3",
-    "level": "suave",
-    "cooldown": 10
-  },
-  "!elegosta": {
-    "url": "https://www.myinstants.com/media/sounds/tmpd9mca4be.mp3",
-    "level": "suave"
-  },
   "!ui": {
     "url": "https://www.myinstants.com/media/sounds/ui-rodrigo-faro.mp3",
-    "level": "suave"
-  },
-  "!tome": {
-    "url": "https://www.myinstants.com/media/sounds/tome-rodrigo-faro_xDXKGwq.mp3",
-    "level": "suave"
-  },
-  "!fart": {
-    "url": "https://www.myinstants.com/media/sounds/dry-fart.mp3",
-    "level": "suave"
-  },
-  "!raze": {
-    "url": "https://www.myinstants.com/media/sounds/raze-inimiga-ultando-pt-br.mp3",
     "level": "suave"
   },
   "!defuse": {
@@ -69,58 +38,89 @@
     "url": "https://www.myinstants.com/media/sounds/gekko-ult-br.mp3",
     "level": "suave"
   },
-  "!dancagatinho": {
-    "url": "https://www.myinstants.com/media/sounds/y2mate_rLgMJTu.mp3",
-    "level": "suave"
-  },
-  "!qissomeufilho": {
-    "url": "https://www.myinstants.com/media/sounds/que-isso-meu-filho-calma-vai-dar-namoro.mp3",
-    "level": "suave"
-  },
-  "!derrame": {
-    "url": "https://www.myinstants.com/media/sounds/som-inentendivel-rodrigo-faro.mp3",
-    "level": "suave"
-  },
   "!pare": {
     "url": "https://www.myinstants.com/media/sounds/pare.mp3",
     "level": "suave"
   },
-  "!fah": {
-    "url": "https://www.myinstants.com/media/sounds/fahhh_KcgAXfs.mp3",
-    "level": "suave"
-  },
-  "!vineboom": {
-    "url": "https://www.myinstants.com/media/sounds/vine-boom.mp3",
-    "level": "suave"
-  },
-  "!rizz": {
-    "url": "https://www.myinstants.com/media/sounds/rizz-sound-effect.mp3",
-    "level": "suave"
-  },
-  "!among": {
-    "url": "https://www.myinstants.com/media/sounds/among-us-role-reveal-sound.mp3",
-    "level": "suave"
-  },
-  "!aiqdlc": {
-    "url": "https://www.myinstants.com/media/sounds/ai-que-delicia-mickey.mp3",
-    "level": "suave"
-  },
-  "!bigfa": {
-    "url": "https://www.myinstants.com/media/sounds/afinal-eu-sou-seu-maior-fa-syndrome.mp3",
-    "level": "suave"
-  },
-  "!brbr": {
-    "url": "https://www.myinstants.com/media/sounds/efeitos-sonoros-brasil-sil-sil-rede-globo.mp3",
-    "level": "suave"
-  },
-  "!calado": {
-    "url": "https://www.myinstants.com/media/sounds/e-quem-ficar-calado.mp3",
-    "level": "suave",
-    "cooldown": 10
-  },
   "!pix": {
     "url": "https://www.myinstants.com/media/sounds/cade-meu-pix.mp3",
     "level": "suave",
+    "cooldown": 10
+  },
+  "!peidofunk": {
+    "url": "https://www.myinstants.com/media/sounds/peido-funk-som.mp3",
+    "level": "vip",
+    "cooldown": 1
+  },
+  "!madeira": {
+    "url": "https://www.myinstants.com/media/sounds/tu-quer-madeira.mp3",
+    "level": "vip",
+    "cooldown": 10
+  },
+  "!undaia": {
+    "url": "https://www.myinstants.com/media/sounds/undaia-meme.mp3",
+    "level": "vip",
+    "cooldown": 10
+  },
+  "!elegosta": {
+    "url": "https://www.myinstants.com/media/sounds/tmpd9mca4be.mp3",
+    "level": "vip"
+  },
+  "!tome": {
+    "url": "https://www.myinstants.com/media/sounds/tome-rodrigo-faro_xDXKGwq.mp3",
+    "level": "vip"
+  },
+  "!fart": {
+    "url": "https://www.myinstants.com/media/sounds/dry-fart.mp3",
+    "level": "vip"
+  },
+  "!raze": {
+    "url": "https://www.myinstants.com/media/sounds/raze-inimiga-ultando-pt-br.mp3",
+    "level": "vip"
+  },
+  "!dancagatinho": {
+    "url": "https://www.myinstants.com/media/sounds/y2mate_rLgMJTu.mp3",
+    "level": "vip"
+  },
+  "!qissomeufilho": {
+    "url": "https://www.myinstants.com/media/sounds/que-isso-meu-filho-calma-vai-dar-namoro.mp3",
+    "level": "vip"
+  },
+  "!derrame": {
+    "url": "https://www.myinstants.com/media/sounds/som-inentendivel-rodrigo-faro.mp3",
+    "level": "vip"
+  },
+  "!fah": {
+    "url": "https://www.myinstants.com/media/sounds/fahhh_KcgAXfs.mp3",
+    "level": "vip"
+  },
+  "!vineboom": {
+    "url": "https://www.myinstants.com/media/sounds/vine-boom.mp3",
+    "level": "vip"
+  },
+  "!rizz": {
+    "url": "https://www.myinstants.com/media/sounds/rizz-sound-effect.mp3",
+    "level": "vip"
+  },
+  "!among": {
+    "url": "https://www.myinstants.com/media/sounds/among-us-role-reveal-sound.mp3",
+    "level": "vip"
+  },
+  "!aiqdlc": {
+    "url": "https://www.myinstants.com/media/sounds/ai-que-delicia-mickey.mp3",
+    "level": "vip"
+  },
+  "!bigfa": {
+    "url": "https://www.myinstants.com/media/sounds/afinal-eu-sou-seu-maior-fa-syndrome.mp3",
+    "level": "vip"
+  },
+  "!brbr": {
+    "url": "https://www.myinstants.com/media/sounds/efeitos-sonoros-brasil-sil-sil-rede-globo.mp3",
+    "level": "vip"
+  },
+  "!calado": {
+    "url": "https://www.myinstants.com/media/sounds/e-quem-ficar-calado.mp3",
+    "level": "vip",
     "cooldown": 10
   },
   "!brutal": {
