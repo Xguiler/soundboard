@@ -319,4 +319,4 @@ enviarHeartbeat();
 setInterval(enviarHeartbeat,10000);
 
 atualizarCabecalho();
-renderizarCategorias();
+carregarCatalogo();
