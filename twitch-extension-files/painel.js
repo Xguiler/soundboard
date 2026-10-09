@@ -1,5 +1,5 @@
 const CATEGORIAS=[
-{key:'suave',label:'🟢 SUAVE',level:0,sons:['!peido','!peido2','!peido3','!cavalo','!pare','!ui','!defuse','!plant','!chamber','!gekko','!pix','!bebê','!aiqlc']},
+{key:'suave',label:'🟢 SUAVE',level:0,sons:['!peido','!peido2','!peido3','!cavalo','!pare','!ui','!defuse','!plant','!chamber','!gekko','!pix','!aiqdlc']},
 {key:'vip',label:'🟣 VIP',level:1,sons:['!peidofunk','!madeira','!undaia','!elegosta','!tome','!fart','!raze','!dancagatinho','!qissomeufilho','!derrame','!fah','!vineboom','!rizz','!among','!bigfa','!brbr','!calado','!brutal','!falei','!oruam','!freio','!cebolinha2','!wow2','!wow','!dexter','!nemesis','!brass','!indian','!ack','!heehee','!donald','!engracado','!gordo','!aura','!ego','!gripada','!moreno','!lavando','!obrigado','!ui2','!movie','!sentimento','!fail']},
 {key:'elite',label:'🔵 ELITE',level:2,sons:['!auuu','!like','!cooked','!wnd','!rapazes','!kiko','!motivacional','!cr7','!gay','!problema','!escolhido','!cachorro','!pain','!tmp','!spider','!file','!heroi','!naosobrou','!chuva','!monark','!fart2','!pablo','!velhos','!ferrei']},
 {key:'furia',label:'🟠 FÚRIA',level:3,sons:['!risada','!miauu','!bolso','!cebolinha','!grr','!lutador','!prowler','!jojo','!porra','!heart','!caganeira','!galinha','!mendigo','!ai','!tira','!longfart','!vagabunda','!tobias','!deg','!maconha','!calaboca']},
