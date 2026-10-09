@@ -1,0 +1,28 @@
+SOUNDBOARD DO CAOS — ARQUIVOS PARA EXTENSÃO TWITCH
+
+Esta pasta foi criada separada dos arquivos do site, para não alterar a página publicada.
+
+Arquivos:
+- index.html
+- mobile.html
+- config.html
+- config.js
+- realtime.js
+- painel.js
+- painel.css
+
+Também é necessário incluir logo-xguiler.png no ZIP final. Baixe a imagem do repositório principal:
+https://github.com/Xguiler/soundboard/blob/main/logo-xguiler.png
+
+Para montar o ZIP:
+1. Baixe cada arquivo desta pasta mantendo todos na mesma pasta local.
+2. Baixe também logo-xguiler.png pelo link acima.
+3. Selecione os arquivos, clique com o botão direito e escolha Enviar para > Pasta compactada.
+4. Envie o ZIP em Arquivos > Upload Version Assets no console da Twitch.
+
+Configuração na Twitch:
+- Panel Viewer Path: index.html
+- Mobile Viewer Path: mobile.html
+- Configuration Path: config.html
+
+A conexão Realtime foi reorganizada para tratar a resposta de inscrição e o retorno de envio. Ainda é necessário testar no modo de teste da Twitch; não há como confirmar o funcionamento sem o teste da extensão.
