@@ -25,7 +25,7 @@ async function getLivePixToken(clientId: string, clientSecret: string) {
     grant_type: "client_credentials",
     client_id: clientId,
     client_secret: clientSecret,
-    scope: "wallet:read",
+    scope: "wallet:read webhooks",
   });
 
   const response = await fetch("https://oauth.livepix.gg/oauth2/token", {
