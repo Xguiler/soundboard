@@ -53,6 +53,8 @@ let ultimaAtualizacao = 0;
 let liveOnline = false;
 let ultimoEstadoTimestamp = 0;
 let canalPronto = false;
+let roundEndsAt = 0;
+let totalDoacoesCentavos = 0;
 
 const VISITOR_ID_KEY = "xguiler_soundboard_visitor_id";
 
@@ -291,6 +293,8 @@ function aplicarEstado(payload) {
   nivelAtivo=Math.min(4,Math.max(0,Number(payload.nivelAtivo)||0));
   tempoRestante=Math.max(0,Number(payload.tempoRestante)||0);
   cooldownAte=Math.max(0,Number(payload.cooldownAte)||0);
+  roundEndsAt=Math.max(0,Number(payload.roundEndsAt)||0);
+  totalDoacoesCentavos=Math.max(0,Number(payload.totalCentavos)||0);
 
   if(!cooldownAte && Number(payload.cooldownRestante)>0){
     cooldownAte=Date.now()+Number(payload.cooldownRestante)*1000;
@@ -312,6 +316,8 @@ channel
       canalPronto=true;
       status.textContent="🟡 Aguardando live...";
       status.className="status waiting";
+      const {data,error}=await client.rpc("get_soundboard_lvlup_state");
+      if(!error && data) aplicarEstado(data);
       await channel.send({type:"broadcast",event:"state_request",payload:{}});
     }else{
       canalPronto=false;
@@ -331,7 +337,12 @@ if(infoToggle){
 setInterval(()=>{
   if(!liveOnline)return;
 
-  if(tempoRestante>0){
+  if(roundEndsAt && Date.now()>=roundEndsAt){
+    nivelAtivo=0;
+    tempoRestante=0;
+    roundEndsAt=0;
+    totalDoacoesCentavos=0;
+  }else if(tempoRestante>0){
     tempoRestante=Math.max(0,tempoRestante-1);
   }
 
