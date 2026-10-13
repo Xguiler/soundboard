@@ -41,6 +41,7 @@ const totalVisitsEl = document.getElementById("totalVisits");
 const onlineNowEl = document.getElementById("onlineNow");
 const peakOnlineEl = document.getElementById("peakOnline");
 const randomButton = document.getElementById("randomButton");
+const roundStatusEl = document.getElementById("roundStatus");
 
 const client = supabase.createClient(SB_CONFIG.SUPABASE_URL, SB_CONFIG.SUPABASE_ANON_KEY);
 const channel = client.channel(SB_CONFIG.ROOM_ID);
@@ -80,6 +81,24 @@ function atualizarStatsUI(stats) {
   if(totalVisitsEl) totalVisitsEl.textContent=Number(stats.total_visits||0).toLocaleString("pt-BR");
   if(onlineNowEl) onlineNowEl.textContent=Number(stats.online||0).toLocaleString("pt-BR");
   if(peakOnlineEl) peakOnlineEl.textContent=Number(stats.peak_online||0).toLocaleString("pt-BR");
+}
+
+function formatarJanela(segundos) {
+  const s=Math.max(0,Math.floor(Number(segundos)||0));
+  const m=Math.floor(s/60);
+  const sec=s%60;
+  return String(m).padStart(2,"0")+":"+String(sec).padStart(2,"0");
+}
+
+function atualizarRoundStatus() {
+  if(!roundStatusEl) return;
+  const total=(Math.max(0,totalDoacoesCentavos)/100).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+  if(!roundEndsAt || Date.now()>=roundEndsAt) {
+    roundStatusEl.textContent="💸 Total da rodada: R$ 0,00 · ⏳ Aguardando primeira doação";
+    return;
+  }
+  const restante=Math.max(0,Math.ceil((roundEndsAt-Date.now())/1000));
+  roundStatusEl.textContent="💸 Total da rodada: "+total+" · ⏳ Janela: "+formatarJanela(restante);
 }
 
 async function registrarVisita() {
@@ -306,6 +325,7 @@ function aplicarEstado(payload) {
   status.className="status online";
 
   atualizarCabecalho();
+  atualizarRoundStatus();
   renderizarCategorias();
 }
 
@@ -347,6 +367,7 @@ setInterval(()=>{
   }
 
   atualizarCabecalho();
+  atualizarRoundStatus();
   renderizarCategorias();
 },1000);
 
@@ -363,4 +384,5 @@ enviarHeartbeat();
 setInterval(enviarHeartbeat,10000);
 
 atualizarCabecalho();
+atualizarRoundStatus();
 carregarCatalogo();
