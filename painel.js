@@ -41,6 +41,7 @@ const totalVisitsEl = document.getElementById("totalVisits");
 const onlineNowEl = document.getElementById("onlineNow");
 const peakOnlineEl = document.getElementById("peakOnline");
 const randomButton = document.getElementById("randomButton");
+const roundStatusEl = document.getElementById("roundStatus");
 
 const client = supabase.createClient(SB_CONFIG.SUPABASE_URL, SB_CONFIG.SUPABASE_ANON_KEY);
 const channel = client.channel(SB_CONFIG.ROOM_ID);
@@ -53,6 +54,8 @@ let ultimaAtualizacao = 0;
 let liveOnline = false;
 let ultimoEstadoTimestamp = 0;
 let canalPronto = false;
+let roundEndsAt = 0;
+let totalDoacoesCentavos = 0;
 
 const VISITOR_ID_KEY = "xguiler_soundboard_visitor_id";
 
@@ -78,6 +81,24 @@ function atualizarStatsUI(stats) {
   if(totalVisitsEl) totalVisitsEl.textContent=Number(stats.total_visits||0).toLocaleString("pt-BR");
   if(onlineNowEl) onlineNowEl.textContent=Number(stats.online||0).toLocaleString("pt-BR");
   if(peakOnlineEl) peakOnlineEl.textContent=Number(stats.peak_online||0).toLocaleString("pt-BR");
+}
+
+function formatarJanela(segundos) {
+  const s=Math.max(0,Math.floor(Number(segundos)||0));
+  const m=Math.floor(s/60);
+  const sec=s%60;
+  return String(m).padStart(2,"0")+":"+String(sec).padStart(2,"0");
+}
+
+function atualizarRoundStatus() {
+  if(!roundStatusEl) return;
+  const total=(Math.max(0,totalDoacoesCentavos)/100).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+  if(!roundEndsAt || Date.now()>=roundEndsAt) {
+    roundStatusEl.textContent="💸 Total da rodada: R$ 0,00 · ⏳ Aguardando primeira doação";
+    return;
+  }
+  const restante=Math.max(0,Math.ceil((roundEndsAt-Date.now())/1000));
+  roundStatusEl.textContent="💸 Total da rodada: "+total+" · ⏳ Janela: "+formatarJanela(restante);
 }
 
 async function registrarVisita() {
@@ -291,6 +312,8 @@ function aplicarEstado(payload) {
   nivelAtivo=Math.min(4,Math.max(0,Number(payload.nivelAtivo)||0));
   tempoRestante=Math.max(0,Number(payload.tempoRestante)||0);
   cooldownAte=Math.max(0,Number(payload.cooldownAte)||0);
+  roundEndsAt=Math.max(0,Number(payload.roundEndsAt)||0);
+  totalDoacoesCentavos=Math.max(0,Number(payload.totalCentavos)||0);
 
   if(!cooldownAte && Number(payload.cooldownRestante)>0){
     cooldownAte=Date.now()+Number(payload.cooldownRestante)*1000;
@@ -302,6 +325,7 @@ function aplicarEstado(payload) {
   status.className="status online";
 
   atualizarCabecalho();
+  atualizarRoundStatus();
   renderizarCategorias();
 }
 
@@ -312,6 +336,8 @@ channel
       canalPronto=true;
       status.textContent="🟡 Aguardando live...";
       status.className="status waiting";
+      const {data,error}=await client.rpc("get_soundboard_lvlup_state");
+      if(!error && data) aplicarEstado(data);
       await channel.send({type:"broadcast",event:"state_request",payload:{}});
     }else{
       canalPronto=false;
@@ -331,11 +357,17 @@ if(infoToggle){
 setInterval(()=>{
   if(!liveOnline)return;
 
-  if(tempoRestante>0){
+  if(roundEndsAt && Date.now()>=roundEndsAt){
+    nivelAtivo=0;
+    tempoRestante=0;
+    roundEndsAt=0;
+    totalDoacoesCentavos=0;
+  }else if(tempoRestante>0){
     tempoRestante=Math.max(0,tempoRestante-1);
   }
 
   atualizarCabecalho();
+  atualizarRoundStatus();
   renderizarCategorias();
 },1000);
 
@@ -352,4 +384,5 @@ enviarHeartbeat();
 setInterval(enviarHeartbeat,10000);
 
 atualizarCabecalho();
+atualizarRoundStatus();
 carregarCatalogo();

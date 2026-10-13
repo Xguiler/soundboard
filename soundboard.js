@@ -6,9 +6,9 @@ const audio = new Audio();
 let tempoRestante = 0;
 let nivelAtivo = 0;
 let timer = null;
-
-// cotação dinâmica (mude com !setreal 60)
-let segundosPorReal = 300;
+let roundEndsAt = 0;
+let totalDoacoesCentavos = 0;
+let ultimoEstadoExternoTimestamp = 0;
 
 // seu nick (lowercase)
 const ADMIN_NICK = "xguiler";
@@ -38,12 +38,22 @@ let cooldownAte = 0;
 // ============================
 // HUD
 // ============================
+function formatarJanela(segundos) {
+  const s=Math.max(0,Math.floor(Number(segundos)||0));
+  const m=Math.floor(s/60);
+  const sec=s%60;
+  return String(m).padStart(2,"0")+":"+String(sec).padStart(2,"0");
+}
+
 function atualizarHUD() {
   const el = document.getElementById("statusHUD");
   if (!el) return;
   const nomesNivel = ["SUAVE", "VIP", "ELITE", "FÚRIA", "APOCALIPSE"];
   const nome = nomesNivel[nivelAtivo] || "SUAVE";
-  el.innerHTML = `<center><span class="titulo">🔊 Soundboard 🔊</span><span class="divisor">│</span><span class="nivel"> ⌨️ !Som ⌨️</span><span class="divisor">│</span><span class="comando"> 𝑳𝐕𝑳 ⌨️ !${nome.toLowerCase()}</span><span class="divisor">│</span><span class="tempo">⏱ ${tempoRestante === 0 ? "♾️♾️♾️♾️" : tempoRestante + "s"}</span></center>`;
+  const total=(Math.max(0,totalDoacoesCentavos)/100).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+  const janela=roundEndsAt>Date.now() ? formatarJanela(Math.ceil((roundEndsAt-Date.now())/1000)) : "aguardando";
+  const timerTexto=tempoRestante>0 ? formatarJanela(tempoRestante) : "00:00";
+  el.innerHTML = `<center><span class="titulo">🔊 Soundboard 🔊</span><span class="divisor">│</span><span class="nivel"> ⌨️ !Som ⌨️</span><span class="divisor">│</span><span class="comando"> 𝑳𝐕𝑳 ⌨️ !${nome.toLowerCase()}</span><span class="divisor">│</span><span class="tempo">⏱ ${timerTexto}</span><span class="divisor">│</span><span class="total">💰 ${total}</span><span class="divisor">│</span><span class="janela">🕒 ${janela}</span></center>`;
 }
 
 // ============================
@@ -600,14 +610,88 @@ const sons = {
   }
 };
 
-function iniciarTimer(){if(timer)return;timer=setInterval(()=>{tempoRestante--;if(tempoRestante<=0){clearInterval(timer);timer=null;tempoRestante=0;nivelAtivo=0;atualizarHUD();enviarEstadoPainel()}},1000)}
-function showDonateToast(text){}
-let donateQueueValor=0,donateQueueCount=0,donateQueueMaxNivel=0,donateFlushTimer=null,lastTipKey=null;
-function parseValor(rawAmount){const s=String(rawAmount).replace("R$","").replace(/\s/g,"").replace(",",".");const v=parseFloat(s);return Number.isFinite(v)?v:NaN}
-function nivelPorFaixa(valor){if(valor>=50)return 4;if(valor>=25)return 3;if(valor>=5)return 2;if(valor>=1)return 1;return 0}
-window.addEventListener("onEventReceived",function(obj){const listener=obj?.detail?.listener;if(listener==="tip-latest"){const ev=obj.detail.event||{};const valor=parseValor(ev.amount);if(isNaN(valor))return;const bucket=Math.floor(Date.now()/3000);const tipKey=ev._id||ev.id||ev.transactionId||ev.createdAt||`${valor}:${ev.name||ev.username||""}:${bucket}`;if(tipKey&&tipKey===lastTipKey)return;lastTipKey=tipKey;const nivelNovo=nivelPorFaixa(valor);const tempoExtra=Math.floor(valor*segundosPorReal);tempoRestante+=tempoExtra;if(nivelNovo>nivelAtivo)nivelAtivo=nivelNovo;iniciarTimer();atualizarHUD();enviarEstadoPainel();donateQueueValor+=valor;donateQueueCount+=1;donateQueueMaxNivel=Math.max(donateQueueMaxNivel,nivelNovo);if(donateFlushTimer)clearTimeout(donateFlushTimer);donateFlushTimer=setTimeout(()=>{donateQueueValor=0;donateQueueCount=0;donateQueueMaxNivel=0;donateFlushTimer=null},5000);return}
-if(listener!=="message")return;const msg=obj.detail.event.data.text.trim().toLowerCase();const user=obj.detail.event.data.nick.trim().toLowerCase();if(user===ADMIN_NICK){if(msg.startsWith("!setreal ")){const novoValor=parseInt(msg.split(" ")[1],10);if(!isNaN(novoValor)&&novoValor>0){segundosPorReal=novoValor;atualizarHUD();enviarEstadoPainel()}return}if(msg==="!statusadmin"){atualizarHUD();console.log("[STATUS]",{nivelAtivo,tempoRestante,segundosPorReal});return}const adminMap={"!vipadmin":{nivel:1,tempo:300},"!eliteadmin":{nivel:2,tempo:600},"!furiaadmin":{nivel:3,tempo:1800},"!apocalipseadmin":{nivel:4,tempo:3600}};if(adminMap[msg]){const {nivel,tempo}=adminMap[msg];nivelAtivo=nivel;tempoRestante=tempo;cooldownAte=0;if(timer){clearInterval(timer);timer=null}iniciarTimer();atualizarHUD();enviarEstadoPainel();setTimeout(enviarEstadoPainel,300);setTimeout(enviarEstadoPainel,1000);return}if(msg==="!resetadmin"){nivelAtivo=0;tempoRestante=0;cooldownAte=0;if(timer){clearInterval(timer);timer=null}atualizarHUD();enviarEstadoPainel();setTimeout(enviarEstadoPainel,300);setTimeout(enviarEstadoPainel,1000);return}}
-tocarSomComando(msg)});
+function iniciarTimer(){
+  if(timer || (tempoRestante <= 0 && !roundEndsAt)) return;
+  timer=setInterval(()=>{
+    const agora=Date.now();
+
+    if(roundEndsAt && agora>=roundEndsAt){
+      clearInterval(timer);
+      timer=null;
+      roundEndsAt=0;
+      totalDoacoesCentavos=0;
+      nivelAtivo=0;
+      tempoRestante=0;
+      atualizarHUD();
+      enviarEstadoPainel();
+      return;
+    }
+
+    if(tempoRestante>0) tempoRestante--;
+
+    if(tempoRestante<=0 && nivelAtivo>0){
+      nivelAtivo=Math.max(0,nivelAtivo-1);
+      tempoRestante=nivelAtivo>0 ? 300 : 0;
+    }
+
+    if(tempoRestante<=0 && nivelAtivo===0 && !roundEndsAt){
+      clearInterval(timer);
+      timer=null;
+    }
+
+    atualizarHUD();
+    enviarEstadoPainel();
+  },1000);
+}
+window.addEventListener("onEventReceived",function(obj){
+  const listener=obj?.detail?.listener;
+  if(listener!=="message") return;
+
+  const data=obj?.detail?.event?.data;
+  const msg=String(data?.text||"").trim().toLowerCase();
+  const user=String(data?.nick||"").trim().toLowerCase();
+
+  if(user===ADMIN_NICK){
+    if(msg==="!statusadmin"){
+      atualizarHUD();
+      console.log("[STATUS]",{nivelAtivo,tempoRestante,totalDoacoesCentavos,roundEndsAt});
+      return;
+    }
+
+    const adminMap={
+      "!vipadmin":{nivel:1,tempo:300},
+      "!eliteadmin":{nivel:2,tempo:600},
+      "!furiaadmin":{nivel:3,tempo:1800},
+      "!apocalipseadmin":{nivel:4,tempo:3600}
+    };
+
+    if(adminMap[msg]){
+      const {nivel,tempo}=adminMap[msg];
+      nivelAtivo=nivel;
+      tempoRestante=tempo;
+      cooldownAte=0;
+      if(timer){clearInterval(timer);timer=null}
+      iniciarTimer();
+      atualizarHUD();
+      enviarEstadoPainel();
+      return;
+    }
+
+    if(msg==="!resetadmin"){
+      nivelAtivo=0;
+      tempoRestante=0;
+      roundEndsAt=0;
+      totalDoacoesCentavos=0;
+      cooldownAte=0;
+      if(timer){clearInterval(timer);timer=null}
+      atualizarHUD();
+      enviarEstadoPainel();
+      return;
+    }
+  }
+
+  tocarSomComando(msg);
+});
 
 function getCooldownAtual() {
   const nomes = ["suave", "vip", "elite", "furia", "apocalipse"];
@@ -641,6 +725,26 @@ function tocarSomComando(msg){
 let remoteChannel = null;
 let remoteOnline = false;
 
+function aplicarEstadoExterno(payload, rebroadcast=true) {
+  if(!payload || payload.nivelAtivo === undefined) return;
+
+  const ts=Number(payload.timestamp)||0;
+  if(ts && ts<ultimoEstadoExternoTimestamp) return;
+  if(ts) ultimoEstadoExternoTimestamp=ts;
+
+  nivelAtivo=Math.min(4,Math.max(0,Number(payload.nivelAtivo)||0));
+  tempoRestante=Math.max(0,Number(payload.tempoRestante)||0);
+  roundEndsAt=Math.max(0,Number(payload.roundEndsAt)||0);
+  totalDoacoesCentavos=Math.max(0,Number(payload.totalCentavos)||0);
+  cooldownAte=Math.max(0,Number(payload.cooldownAte)||0);
+
+  if(tempoRestante>0 || roundEndsAt) iniciarTimer();
+  else if(timer){clearInterval(timer);timer=null}
+
+  atualizarHUD();
+  if(rebroadcast) enviarEstadoPainel();
+}
+
 function enviarEstadoPainel() {
   if (!remoteChannel) return;
 
@@ -652,9 +756,26 @@ function enviarEstadoPainel() {
       tempoRestante,
       cooldownAte,
       cooldownRestante: Math.max(0, Math.ceil((cooldownAte - Date.now()) / 1000)),
+      totalCentavos: totalDoacoesCentavos,
+      roundEndsAt: roundEndsAt || null,
       timestamp: Date.now()
     }
   }).catch(err => console.warn("[REMOTE] erro ao enviar estado:", err));
+}
+
+let remoteChannel = null;
+let remoteClient = null;
+let remoteOnline = false;
+
+async function carregarEstadoServidor() {
+  if(!remoteClient) return;
+  const {data,error}=await remoteClient.rpc("get_soundboard_lvlup_state");
+  if(error){
+    console.warn("[LVL UP] Não foi possível carregar estado do Supabase:",error.message);
+    return;
+  }
+  if(data) aplicarEstadoExterno(data,false);
+  enviarEstadoPainel();
 }
 
 (function iniciarControleRemoto() {
@@ -663,34 +784,30 @@ function enviarEstadoPainel() {
     return;
   }
 
-  const client = window.supabase.createClient(
+  remoteClient = window.supabase.createClient(
     SB_CONFIG.SUPABASE_URL,
     SB_CONFIG.SUPABASE_ANON_KEY
   );
 
-  remoteChannel = client.channel(SB_CONFIG.ROOM_ID);
+  remoteChannel = remoteClient.channel(SB_CONFIG.ROOM_ID);
 
   remoteChannel
     .on("broadcast", { event: "sound" }, ({ payload }) => {
       const command = payload?.command;
-      if (command && sons[command]) {
-        tocarSomComando(command);
-      }
+      if (command && sons[command]) tocarSomComando(command);
+    })
+    .on("broadcast", { event: "state" }, ({ payload }) => {
+      aplicarEstadoExterno(payload,true);
     })
     .on("broadcast", { event: "state_request" }, () => {
-      enviarEstadoPainel();
+      carregarEstadoServidor();
     })
-    .subscribe(status => {
+    .subscribe(async status => {
       console.log("[REMOTE]", status);
-
       remoteOnline = status === "SUBSCRIBED";
 
       if (remoteOnline) {
-        enviarEstadoPainel();
-
-        setInterval(() => {
-          enviarEstadoPainel();
-        }, 2000);
+        await carregarEstadoServidor();
       }
     });
 })();

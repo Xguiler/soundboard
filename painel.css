@@ -227,3 +227,18 @@ button:disabled{opacity:.38;cursor:not-allowed}
   button:not(.info-toggle){min-height:54px}
   .site-stats{padding-left:10px;padding-right:10px}
 }
+
+.round-status{
+  width:fit-content;
+  max-width:calc(100% - 24px);
+  margin:0 auto 14px;
+  padding:7px 12px;
+  color:#e4d2ff;
+  background:rgba(22,12,30,.72);
+  border:1px solid rgba(125,0,168,.45);
+  border-radius:10px;
+  text-align:center;
+  font-size:13px;
+  font-weight:800;
+  line-height:1.4;
+}
