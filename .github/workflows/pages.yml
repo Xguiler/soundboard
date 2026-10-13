@@ -27,10 +27,31 @@ jobs:
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Preparar site
+      - name: Preparar site a partir da versão atual
+        run: |
+          mkdir -p _site/obs _site/site/obs
+          cp index.html painel.css painel.js config.js sons.json soundboard.js style.css supabase.min.js _site/
+          cp obs/index.html _site/obs/index.html
+          cat > _site/site/obs/index.html <<'EOF'
+          <!doctype html>
+          <html lang="pt-BR">
+          <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="refresh" content="0; url=../../obs/">
+            <meta name="robots" content="noindex">
+            <title>Soundboard OBS — redirecionando</title>
+          </head>
+          <body>
+            <p>O overlay mudou de endereço. <a href="../../obs/">Clique aqui para abrir o overlay do OBS.</a></p>
+            <script>window.location.replace("../../obs/");</script>
+          </body>
+          </html>
+          EOF
+
+      - name: Enviar arquivos do GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'site'
+          path: '_site'
 
       - name: Publicar
         id: deployment
