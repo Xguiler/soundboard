@@ -38,12 +38,22 @@ let cooldownAte = 0;
 // ============================
 // HUD
 // ============================
+function formatarJanela(segundos) {
+  const s=Math.max(0,Math.floor(Number(segundos)||0));
+  const m=Math.floor(s/60);
+  const sec=s%60;
+  return String(m).padStart(2,"0")+":"+String(sec).padStart(2,"0");
+}
+
 function atualizarHUD() {
   const el = document.getElementById("statusHUD");
   if (!el) return;
   const nomesNivel = ["SUAVE", "VIP", "ELITE", "FÚRIA", "APOCALIPSE"];
   const nome = nomesNivel[nivelAtivo] || "SUAVE";
-  el.innerHTML = `<center><span class="titulo">🔊 Soundboard 🔊</span><span class="divisor">│</span><span class="nivel"> ⌨️ !Som ⌨️</span><span class="divisor">│</span><span class="comando"> 𝑳𝐕𝑳 ⌨️ !${nome.toLowerCase()}</span><span class="divisor">│</span><span class="tempo">⏱ ${tempoRestante === 0 ? "♾️♾️♾️♾️" : tempoRestante + "s"}</span></center>`;
+  const total=(Math.max(0,totalDoacoesCentavos)/100).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+  const janela=roundEndsAt>Date.now() ? formatarJanela(Math.ceil((roundEndsAt-Date.now())/1000)) : "aguardando";
+  const timerTexto=tempoRestante>0 ? formatarJanela(tempoRestante) : "00:00";
+  el.innerHTML = `<center><span class="titulo">🔊 Soundboard 🔊</span><span class="divisor">│</span><span class="nivel"> ⌨️ !Som ⌨️</span><span class="divisor">│</span><span class="comando"> 𝑳𝐕𝑳 ⌨️ !${nome.toLowerCase()}</span><span class="divisor">│</span><span class="tempo">⏱ ${timerTexto}</span><span class="divisor">│</span><span class="total">💰 ${total}</span><span class="divisor">│</span><span class="janela">🕒 ${janela}</span></center>`;
 }
 
 // ============================
