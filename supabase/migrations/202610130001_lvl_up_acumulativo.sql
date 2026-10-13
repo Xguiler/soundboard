@@ -181,10 +181,10 @@ begin
 
   v_total := s.total_amount_cents + p_amount_cents;
 
-  -- Níveis por total coletivo da rodada: R$1 / R$5 / R$25 / R$50.
+  -- Níveis por total coletivo da rodada: R$1 / R$5 / R$20 / R$50.
   v_threshold_level := case
     when v_total >= 5000 then 4
-    when v_total >= 2500 then 3
+    when v_total >= 2000 then 3
     when v_total >= 500 then 2
     when v_total >= 100 then 1
     else 0
