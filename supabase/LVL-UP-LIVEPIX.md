@@ -8,7 +8,7 @@ Esta pasta contém a base do backend. **Ela não entra em funcionamento só por 
 - Confere o ID do pagamento consultando a API oficial LivePix antes de creditar.
 - Usa o ID do pagamento como chave única, para que reenvios do webhook não dupliquem o valor.
 - A primeira doação inicia uma janela fixa de 15 minutos; as seguintes somam ao total sem reiniciar a janela.
-- Faixas do total coletivo: R$ 1,00 = VIP; R$ 5,00 = ELITE; R$ 25,00 = FÚRIA; R$ 50,00 = APOCALIPSE.
+- Faixas do total coletivo: R$ 1,00 = VIP; R$ 5,00 = ELITE; R$ 20,00 = FÚRIA; R$ 50,00 = APOCALIPSE.
 - Cada nível recém-desbloqueado acrescenta 300 segundos.
 - Ao terminar o timer, a base reduz um nível por etapa; o término da janela encerra a rodada e volta ao SUAVE.
 
@@ -58,7 +58,7 @@ Cadastre a URL completa acima como webhook de pagamentos recebidos na conta Live
 1. Envie uma doação de teste pequena.
 2. Confirme que aparece uma única linha em `soundboard_lvlup_donations`.
 3. Reenvie o webhook no painel LivePix e confirme que o total não duplica.
-4. Teste as faixas de R$ 1, R$ 5, R$ 25 e R$ 50, além do fim da janela e do timer.
+4. Teste as faixas de R$ 1, R$ 5, R$ 20 e R$ 50, além do fim da janela e do timer.
 5. Só então habilite a integração no overlay e no painel.
 
 **Importante:** esta entrega prepara a camada de backend. A ligação final do estado ao JavaScript do OBS/painel e o teste real dependem da publicação da função e das credenciais configuradas no seu Supabase/LivePix. Não compartilhe os segredos; configure-os diretamente no painel do Supabase.
