@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lvl Up Acumulativo — Overlay OBS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-mode="overlay">
+  <main class="wrap">
+    <h1 class="brand">🍁 LVL UP ACUMULATIVO 🍁</h1>
+    <p class="subtitle">Soundboard do Caos · Doações coletivas</p>
+    <div id="currentLevel" class="level suave">🟢 SUAVE</div>
+    <div id="levelTimer" class="timer">00:00</div>
+    <section class="stats">
+      <div class="stat"><span class="label">Total da rodada</span><strong id="roundTotal" class="value">R$ 0,00</strong></div>
+      <div class="stat"><span class="label">Janela coletiva</span><strong id="roundTimer" class="value">Aguardando doação</strong></div>
+      <div class="stat"><span class="label">Maior nível desbloqueado</span><strong id="highestLevel" class="value">🟢 SUAVE</strong></div>
+      <div class="stat"><span class="label">Metas</span><strong class="value">R$1 · R$5 · R$20 · R$50</strong></div>
+    </section>
+    <div class="progress"><div id="windowProgress"></div></div>
+    <div id="connectionStatus" class="status">🟡 Conectando ao Supabase...</div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
