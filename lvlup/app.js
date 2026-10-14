@@ -12,6 +12,7 @@
   let channel = null;
   let client = null;
   let lastError = "";
+  let realtimeConnected = false;
   const money = (value) => Number(value || 0).toLocaleString("pt-BR", {
     style: "currency", currency: "BRL"
   });
@@ -65,7 +66,7 @@
       currentState = data;
       lastError = "";
       render();
-      setStatus("🟢 Conectado ao Supabase", "ok");
+      setStatus(realtimeConnected ? "🟢 Atualizado em tempo real" : "🟢 Conectado ao Supabase", "ok");
     } catch (error) {
       lastError = error?.message || String(error);
       setStatus("🔴 Não foi possível carregar o Lvl Up: " + lastError, "err");
@@ -90,13 +91,14 @@
       })
       .subscribe((status) => {
         if (status === "SUBSCRIBED") {
+          realtimeConnected = true;
           if (!lastError) setStatus("🟢 Atualizado em tempo real", "ok");
           loadState();
-        } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+        } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") {
+          realtimeConnected = false;
           setStatus("🟡 Realtime instável; tentando atualizar pela consulta periódica.", "");
         }
       });
-    // Fallback caso a conexão Realtime caia; consulta somente a linha pública de estado.
     window.setInterval(loadState, 15000);
     window.setInterval(render, 250);
     window.addEventListener("beforeunload", () => {
