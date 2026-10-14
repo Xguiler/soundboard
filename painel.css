@@ -137,3 +137,19 @@ button:disabled{opacity:.38;cursor:not-allowed}
 
 .marker.reached b{color:#7fffb0;text-shadow:0 0 8px rgba(85,223,140,.55)}
 .marker.reached i{height:9px;box-shadow:0 0 7px currentColor}
+
+/* Centraliza os indicadores do termometro do Lvl Up */
+.lvlup-meter-head,
+.lvlup-meter-foot {
+  justify-content: center;
+  text-align: center;
+  column-gap: 22px;
+  row-gap: 6px;
+}
+.lvlup-meter-head > span,
+.lvlup-meter-foot > span {
+  text-align: center;
+}
+.lvlup-round-timer {
+  text-align: center;
+}
