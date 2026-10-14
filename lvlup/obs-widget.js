@@ -14,6 +14,13 @@
   let client = null;
   let channel = null;
   let state = null;
+  let statusEl = null;
+
+  const setStatus = (message, isError = false) => {
+    if (!statusEl) return;
+    statusEl.textContent = message;
+    statusEl.style.color = isError ? "#ff8a8a" : "#c9b7ff";
+  };
 
   const money = (value) => Number(value || 0).toLocaleString("pt-BR", {
     style: "currency",
@@ -40,14 +47,20 @@
     const endAt = state.fim_janela ? Date.parse(state.fim_janela) : NaN;
     const roundSeconds = Number.isFinite(endAt) ? Math.max(0, (endAt - Date.now()) / 1000) : 0;
 
-    $("lvlupObsLevel").textContent = level.emoji + " " + level.label;
-    $("lvlupObsTotal").textContent = money(total) + " / R$ 50,00";
-    $("lvlupObsTimer").textContent = levelKey === "SUAVE" ? "⏱️ ∞" : "⏱️ " + duration(levelSeconds);
-    $("lvlupObsRound").textContent = state.fim_janela
+    const levelEl = $("lvlupObsLevel");
+    const totalEl = $("lvlupObsTotal");
+    const timerEl = $("lvlupObsTimer");
+    const roundEl = $("lvlupObsRound");
+    const fillEl = $("lvlupObsFill");
+
+    if (levelEl) levelEl.textContent = level.emoji + " " + level.label;
+    if (totalEl) totalEl.textContent = money(total) + " / R$ 50,00";
+    if (timerEl) timerEl.textContent = levelKey === "SUAVE" ? "⏱️ ∞" : "⏱️ " + duration(levelSeconds);
+    if (roundEl) roundEl.textContent = state.fim_janela
       ? "Rodada coletiva: " + duration(roundSeconds) + " restantes"
       : "Rodada coletiva: aguardando primeira doação";
 
-    $("lvlupObsFill").style.width = Math.min(100, Math.max(0, total / 50 * 100)) + "%";
+    if (fillEl) fillEl.style.width = Math.min(100, Math.max(0, total / 50 * 100)) + "%";
     const track = $("lvlupObsTrack");
     if (track) track.setAttribute("aria-valuenow", String(Math.min(50, total)));
 
@@ -57,6 +70,7 @@
   }
 
   async function loadState() {
+    if (!client) throw new Error("Cliente Supabase não inicializado.");
     const { data, error } = await client
       .from("lvlup_estado")
       .select("id,nivel,tempo_restante,total_rodada,inicio_rodada,fim_janela,atualizado_em,maior_nivel_desbloqueado")
@@ -64,15 +78,27 @@
       .maybeSingle();
 
     if (error) throw error;
-    if (!data) throw new Error("A linha id=1 não foi encontrada em lvlup_estado.");
+    if (!data) throw new Error("Não encontrei a linha id=1 em lvlup_estado.");
     state = data;
     draw();
+    setStatus("DADOS OK · " + String(data.nivel || "SUAVE") + " · " + money(data.total_rodada));
   }
 
   async function start() {
+    const bar = $("lvlupObsBar");
+    if (bar && !$("lvlupObsStatus")) {
+      statusEl = document.createElement("div");
+      statusEl.id = "lvlupObsStatus";
+      statusEl.style.cssText = "font:600 11px Arial,sans-serif;margin-top:5px;text-align:right;letter-spacing:.04em;";
+      bar.appendChild(statusEl);
+    } else {
+      statusEl = $("lvlupObsStatus");
+    }
+
     try {
+      setStatus("CONECTANDO AO SUPABASE…");
       if (!window.supabase || !window.SB_CONFIG) {
-        throw new Error("Supabase ou SB_CONFIG não foi carregado no HTML do widget.");
+        throw new Error("Supabase ou SB_CONFIG não foi carregado no HTML do overlay.");
       }
 
       client = window.supabase.createClient(
@@ -83,7 +109,7 @@
       await loadState();
 
       channel = client
-        .channel("soundboard-lvlup-obs-widget")
+        .channel("soundboard-lvlup-obs-widget-v2")
         .on("postgres_changes", {
           event: "*",
           schema: "public",
@@ -93,21 +119,28 @@
           if (payload.new && Number(payload.new.id) === 1) {
             state = payload.new;
             draw();
+            setStatus("AO VIVO · " + String(state.nivel || "SUAVE") + " · " + money(state.total_rodada));
           }
         })
         .subscribe((status) => {
-          const statusEl = $("lvlupObsStatus");
-          if (statusEl) {
-            statusEl.textContent = status === "SUBSCRIBED" ? "AO VIVO" :
-              (status === "CHANNEL_ERROR" || status === "TIMED_OUT" ? "RECONECTANDO" : "CONECTANDO");
-          }
           if (status === "SUBSCRIBED") {
-            loadState().catch((error) => console.error("[LVLUP OBS]", error));
+            setStatus("REALTIME CONECTADO");
+            loadState().catch((error) => {
+              console.error("[LVLUP OBS] leitura:", error);
+              setStatus("ERRO DE LEITURA: " + (error.message || String(error)), true);
+            });
+          } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+            setStatus("ERRO REALTIME · tentando novamente", true);
+          } else {
+            setStatus("REALTIME: " + status);
           }
         });
 
       window.setInterval(() => {
-        loadState().catch((error) => console.error("[LVLUP OBS]", error));
+        loadState().catch((error) => {
+          console.error("[LVLUP OBS] leitura:", error);
+          setStatus("ERRO DE LEITURA: " + (error.message || String(error)), true);
+        });
       }, 15000);
 
       window.setInterval(draw, 250);
@@ -116,8 +149,7 @@
       });
     } catch (error) {
       console.error("[LVLUP OBS]", error);
-      const statusEl = $("lvlupObsStatus");
-      if (statusEl) statusEl.textContent = "SEM CONEXÃO";
+      setStatus("FALHA: " + (error.message || String(error)), true);
     }
   }
 
