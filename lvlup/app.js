@@ -10,6 +10,7 @@
   };
   let currentState = null;
   let channel = null;
+  let client = null;
   let lastError = "";
   const money = (value) => Number(value || 0).toLocaleString("pt-BR", {
     style: "currency", currency: "BRL"
@@ -53,8 +54,8 @@
   async function loadState() {
     try {
       if (!window.supabase || !window.SB_CONFIG) throw new Error("Configuração do Supabase não carregou.");
-      const { data, error } = await window.supabase
-        .createClient(window.SB_CONFIG.SUPABASE_URL, window.SB_CONFIG.SUPABASE_ANON_KEY)
+      if (!client) client = window.supabase.createClient(window.SB_CONFIG.SUPABASE_URL, window.SB_CONFIG.SUPABASE_ANON_KEY);
+      const { data, error } = await client
         .from("lvlup_estado")
         .select("id,nivel,tempo_restante,total_rodada,inicio_rodada,fim_janela,atualizado_em,maior_nivel_desbloqueado")
         .eq("id", 1)
@@ -76,7 +77,7 @@
       setStatus("🔴 Configuração do Supabase não carregou.", "err");
       return;
     }
-    const client = window.supabase.createClient(window.SB_CONFIG.SUPABASE_URL, window.SB_CONFIG.SUPABASE_ANON_KEY);
+    client = window.supabase.createClient(window.SB_CONFIG.SUPABASE_URL, window.SB_CONFIG.SUPABASE_ANON_KEY);
     await loadState();
     channel = client.channel("lvlup-display-public")
       .on("postgres_changes", { event: "*", schema: "public", table: "lvlup_estado", filter: "id=eq.1" }, (payload) => {
