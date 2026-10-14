@@ -30,8 +30,6 @@
     const end = state.fim_janela ? Date.parse(state.fim_janela) : NaN;
     const roundTime = Number.isFinite(end) ? Math.max(0, (end - Date.now()) / 1000) : 0;
     $("lvlupMeter").dataset.level = levelKey;
-    $("lvlupCurrentLevel").textContent = level.label;
-    $("lvlupConnection").textContent = realtime ? "🟢 AO VIVO" : "🟡 CONECTADO";
     $("lvlupTotal").textContent = money(total) + " / R$ 50,00";
     $("lvlupTimer").textContent = levelKey === "SUAVE" ? "⏱️ ∞" : "⏱️ " + duration(levelTime);
     $("lvlupRoundTimer").textContent = state.fim_janela
@@ -54,7 +52,6 @@
     draw();
   }
   async function start() {
-    const connection = $("lvlupConnection");
     try {
       if (!window.supabase || !window.SB_CONFIG) throw new Error("Configuração não carregou");
       client = window.supabase.createClient(window.SB_CONFIG.SUPABASE_URL, window.SB_CONFIG.SUPABASE_ANON_KEY);
@@ -77,7 +74,6 @@
           }
         });
       window.setInterval(() => load().catch((error) => {
-        if (connection) connection.textContent = "🔴 ERRO AO LER LVL UP";
         console.error("[LVLUP METER]", error);
       }), 15000);
       window.setInterval(draw, 250);
@@ -85,7 +81,6 @@
         if (channel && client) client.removeChannel(channel);
       });
     } catch (error) {
-      if (connection) connection.textContent = "🔴 LVL UP INDISPONÍVEL";
       console.error("[LVLUP METER]", error);
     }
   }
