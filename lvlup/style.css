@@ -1,0 +1,26 @@
+:root{color-scheme:dark;--bg:rgba(10,10,14,.88);--line:rgba(176,0,255,.55);--purple:#c88cff;--red:#ff5b68;--green:#55ff88;--muted:#b8b8c5}
+*{box-sizing:border-box}
+body{margin:0;background:transparent;color:#fff;font-family:Arial,Helvetica,sans-serif}
+body[data-mode="panel"]{min-height:100vh;background:radial-gradient(circle at top,#171022,#08080b 60%);padding:20px}
+.wrap{width:min(100%,760px);margin:0 auto;padding:20px;border:1px solid var(--line);border-radius:18px;background:var(--bg);box-shadow:0 0 22px rgba(176,0,255,.16);text-align:center}
+.brand{margin:0 0 6px;font-size:clamp(18px,3vw,28px);font-weight:900;letter-spacing:.04em}
+.subtitle{margin:0 0 18px;color:var(--muted);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.level{font-size:clamp(26px,5vw,46px);font-weight:1000;margin:8px 0 4px;text-shadow:0 0 16px rgba(176,0,255,.22)}
+.level.suave{color:#d4d4dc}.level.vip{color:#d5a1ff}.level.elite{color:#7fc9ff}.level.furia{color:#ffb45d}.level.apocalipse{color:#ff6474}
+.timer{font-size:clamp(28px,6vw,52px);font-weight:900;font-variant-numeric:tabular-nums;color:var(--purple);margin:4px 0 18px}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat{padding:12px 10px;border:1px solid rgba(100,100,120,.38);border-radius:12px;background:rgba(0,0,0,.2)}
+.label{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
+.value{display:block;font-size:clamp(17px,3vw,25px);font-weight:900;font-variant-numeric:tabular-nums}
+.progress{height:5px;background:#28202e;border-radius:10px;overflow:hidden;margin:14px 0 0}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,#8c00c8,#ff365b);transition:width .3s}
+.status{font-size:11px;color:#999;margin-top:12px}
+.status.ok{color:var(--green)}.status.err{color:var(--red)}
+body[data-mode="overlay"] .wrap{width:min(520px,100%);padding:14px;border-radius:14px}
+body[data-mode="overlay"] .subtitle{margin-bottom:10px}
+body[data-mode="overlay"] .level{font-size:32px}
+body[data-mode="overlay"] .timer{font-size:38px;margin-bottom:12px}
+body[data-mode="overlay"] .stat{padding:9px 7px}
+body[data-mode="overlay"] .value{font-size:19px}
+body[data-mode="overlay"] .status{margin-top:8px}
+@media(max-width:420px){body[data-mode="panel"]{padding:10px}.wrap{padding:14px}.stats{gap:7px}}
