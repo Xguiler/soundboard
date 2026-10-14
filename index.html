@@ -21,15 +21,16 @@
 <section id="info" class="info">
   <h2>🍁 COMO FUNCIONA A SOUNDBOARD 🍁</h2>
   <h2>⚠️ AINDA TÁ EM TEEEESTE</h2>
-  <p>👀 O <strong>nível liberado aparece na tela</strong> durante a live!</p>
-  <p>💰 O valor de cada doação define o nível liberado:</p>
-  <p>🟣 <strong>R$1,00 a R$4,99</strong> → VIP</p>
-  <p>🔵 <strong>R$5,00 a R$24,99</strong> → ELITE</p>
-  <p>🟠 <strong>R$25,00 a R$49,99</strong> → FÚRIA</p>
-  <p>🔴 <strong>R$50,00 ou mais</strong> → APOCALIPSE</p>
-  <p>⏱️ Cada doação também adiciona tempo ao temporizador da live, e o tempo é <strong>acumulativo</strong>!</p>
-  <p>🎵 <strong>Doações maiores liberam níveis com mais sons disponíveis.</strong></p>
-  <p>🎵 <strong>MANDE SEU SOM!</strong></p>
+  <p>🎲 Use os botões para mandar sons para a live — ou deixe o RANDOM escolher o caos!</p>
+  <p>🌿 <strong>Lvl Up Acumulativo:</strong> doações confirmadas pelo LivePix somam durante uma rodada coletiva de 15 minutos. Novas doações aumentam o total, mas não reiniciam o relógio.</p>
+  <p>🟣 <strong>R$ 1,00</strong> → VIP</p>
+  <p>🔵 <strong>R$ 5,00</strong> → ELITE</p>
+  <p>🟠 <strong>R$ 20,00</strong> → FÚRIA</p>
+  <p>🔴 <strong>R$ 50,00</strong> → APOCALIPSE</p>
+  <p>⏱️ Cada novo nível desbloqueado adiciona <strong>+5 minutos</strong> ao temporizador. Se o tempo acabar, o nível cai uma etapa. O total arrecadado continua acumulado até o fim da rodada.</p>
+  <p>🔄 Quando a janela de 15 minutos termina, a rodada reinicia em SUAVE e o total volta a zero.</p>
+  <p>🎵 Níveis mais altos liberam mais sons disponíveis.</p>
+  <p>💸 <strong>MANDE SEU SOM E APOIE A LIVE!</strong></p>
   <a class="livepix" href="https://livepix.gg/xguiler" target="_blank" rel="noopener">💸 APOIAR PELO LIVEPIX</a>
   <p>Tem um som que combina com a live? Manda sua sugestão pelo nosso bot no Telegram!</p>
   <p>👀 As sugestões são analisadas antes de entrarem na Soundboard.</p>
@@ -39,6 +40,29 @@
 <div class="random-row">
   <button id="randomButton" class="random-button">🎲 RANDOM — MANDE O CAOS</button>
 </div>
+
+<section id="lvlupMeter" class="lvlup-meter" aria-live="polite">
+  <div class="lvlup-meter-head">
+    <span id="lvlupCurrentLevel" class="lvlup-current-level">🟢 SUAVE</span>
+    <span id="lvlupConnection" class="lvlup-connection">Conectando Lvl Up…</span>
+  </div>
+  <div class="lvlup-progress-wrap">
+    <div class="lvlup-progress-track" role="progressbar" aria-label="Progresso da rodada até APOCALIPSE" aria-valuemin="0" aria-valuemax="50" aria-valuenow="0">
+      <div id="lvlupProgressFill" class="lvlup-progress-fill"></div>
+    </div>
+    <div class="lvlup-markers" aria-hidden="true">
+      <span class="marker marker-vip"><i></i><b>R$ 1</b><small>VIP</small></span>
+      <span class="marker marker-elite"><i></i><b>R$ 5</b><small>ELITE</small></span>
+      <span class="marker marker-furia"><i></i><b>R$ 20</b><small>FÚRIA</small></span>
+      <span class="marker marker-apoc"><i></i><b>R$ 50</b><small>APOCALIPSE</small></span>
+    </div>
+  </div>
+  <div class="lvlup-meter-foot">
+    <span id="lvlupTotal">R$ 0,00 / R$ 50,00</span>
+    <span id="lvlupTimer">⏱️ Aguardando doação</span>
+  </div>
+  <div id="lvlupRoundTimer" class="lvlup-round-timer">Rodada coletiva: aguardando primeira doação</div>
+</section>
 
 <main id="grid"></main>
 
