@@ -10,10 +10,6 @@
 <header class="top">
 </header>
 
-<div class="info-button-row">
-  <button id="infoToggle" class="info-toggle">ℹ️ COMO FUNCIONA</button>
-</div>
-
 <div class="status-row">
   <div id="status" class="status offline">🔴 Offline</div>
 </div>
@@ -21,6 +17,23 @@
 <section id="info" class="info">
   <h2>🍁 COMO FUNCIONA A SOUNDBOARD 🍁</h2>
   <h2>⚠️ AINDA TÁ EM TEEEESTE</h2>
+<section id="lvlupMeter" class="lvlup-meter" aria-live="polite">
+  <div class="lvlup-meter-head">
+    <span id="lvlupTimer">⏱️ ∞</span>
+  </div>
+  <div id="lvlupRoundTimer" class="lvlup-round-timer">Rodada coletiva: aguardando primeiro crédito</div>
+  <div class="lvlup-progress-wrap">
+    <div class="lvlup-progress-track" role="progressbar" aria-label="Progresso da rodada até APOCALIPSE" aria-valuemin="0" aria-valuemax="50" aria-valuenow="0">
+      <div id="lvlupProgressFill" class="lvlup-progress-fill"></div>
+    </div>
+    <div class="lvlup-markers" aria-hidden="true">
+      <span class="marker marker-vip"><i></i><b>R$ 1</b><small>VIP</small></span>
+      <span class="marker marker-elite"><i></i><b>R$ 5</b><small>ELITE</small></span>
+      <span class="marker marker-furia"><i></i><b>R$ 20</b><small>FÚRIA</small></span>
+      <span class="marker marker-apoc"><i></i><b>R$ 50</b><small>APOCALIPSE</small></span>
+    </div>
+  </div>
+</section>
   <p>🎲 Use os botões para mandar sons para a live — ou deixe o RANDOM escolher o caos!</p>
   <p>🌿 <strong>Lvl Up Acumulativo:</strong> doações confirmadas pelo LivePix somam durante uma rodada coletiva de 15 minutos. Novas doações aumentam o total, mas não reiniciam o relógio.</p>
   <p>🟣 <strong>R$ 1,00</strong> → VIP</p>
@@ -41,23 +54,11 @@
   <button id="randomButton" class="random-button">🎲 RANDOM — MANDE O CAOS</button>
 </div>
 
-<section id="lvlupMeter" class="lvlup-meter" aria-live="polite">
-  <div class="lvlup-meter-head">
-    <span id="lvlupTimer">⏱️ ∞</span>
-  </div>
-  <div id="lvlupRoundTimer" class="lvlup-round-timer">Rodada coletiva: aguardando primeiro crédito</div>
-  <div class="lvlup-progress-wrap">
-    <div class="lvlup-progress-track" role="progressbar" aria-label="Progresso da rodada até APOCALIPSE" aria-valuemin="0" aria-valuemax="50" aria-valuenow="0">
-      <div id="lvlupProgressFill" class="lvlup-progress-fill"></div>
-    </div>
-    <div class="lvlup-markers" aria-hidden="true">
-      <span class="marker marker-vip"><i></i><b>R$ 1</b><small>VIP</small></span>
-      <span class="marker marker-elite"><i></i><b>R$ 5</b><small>ELITE</small></span>
-      <span class="marker marker-furia"><i></i><b>R$ 20</b><small>FÚRIA</small></span>
-      <span class="marker marker-apoc"><i></i><b>R$ 50</b><small>APOCALIPSE</small></span>
-    </div>
-  </div>
-</section>
+<div class="info-button-row">
+  <button id="infoToggle" class="info-toggle">ℹ️ COMO FUNCIONA</button>
+</div>
+
+
 
 <main id="grid"></main>
 
