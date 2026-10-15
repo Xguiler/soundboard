@@ -34,7 +34,7 @@
     $("lvlupTimer").textContent = levelKey === "SUAVE" ? "⏱️ ∞" : "⏱️ " + duration(levelTime);
     $("lvlupRoundTimer").textContent = state.fim_janela
       ? "Rodada coletiva: " + duration(roundTime) + " restantes · Maior nível: " + maxUnlocked.label
-      : "Rodada coletiva: aguardando primeira doação";
+      : "Rodada coletiva: aguardando primeiro crédito";
     $("lvlupProgressFill").style.width = Math.max(0, Math.min(100, (total / 50) * 100)) + "%";
     const track = document.querySelector(".lvlup-progress-track");
     if (track) track.setAttribute("aria-valuenow", String(Math.min(50, total)));
