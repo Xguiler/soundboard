@@ -175,3 +175,33 @@ button:disabled{opacity:.38;cursor:not-allowed}
   text-align: center;
   margin-top: 5px;
 }
+
+
+/* Indicador do Lvl Up: relógio e rodada centralizados acima da barra */
+.lvlup-meter-head {
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 2px;
+}
+.lvlup-meter-head #lvlupTimer {
+  display: block;
+  width: 100%;
+  color: #c88cff;
+  font-size: 16px;
+  font-weight: 900;
+  text-align: center;
+}
+.lvlup-round-timer {
+  text-align: center;
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: #aaa2b4;
+}
+.lvlup-progress-wrap {
+  margin-top: 12px;
+}
+.lvlup-meter-foot {
+  justify-content: center;
+  text-align: center;
+  margin-top: 5px;
+}
