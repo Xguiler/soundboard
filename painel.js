@@ -136,94 +136,100 @@ function atualizarCabecalho() {
 }
 
 function renderizarCategorias() {
-  grid.innerHTML="";
-  CATEGORIAS.filter(categoria=>categoria.level<=nivelAtivo).forEach(categoria=>{
-    const section=document.createElement("section");
-    section.className="level";
+  grid.innerHTML = "";
 
-    const title=document.createElement("div");
-    title.className="level-title";
+  // Todos os sons desbloqueados ficam juntos em uma única lista.
+  const sonsDisponiveis = CATEGORIAS
+    .filter(categoria => categoria.level <= nivelAtivo)
+    .flatMap(categoria => categoria.sons);
 
-    const titleText=document.createElement("span");
-    titleText.textContent=categoria.label;
-    title.appendChild(titleText);
+  if (!sonsDisponiveis.length) {
+    grid.innerHTML = '<div class="empty">Nenhum som disponível neste nível.</div>';
+    return;
+  }
 
-    // O tempo e o cooldown são globais da Soundboard,
-    // então aparecem em todos os níveis visíveis.
-    const time=document.createElement("span");
-    time.className="level-time";
-    time.textContent="~ "+formatarTempo(tempoRestante);
-    title.appendChild(time);
+  const section = document.createElement("section");
+  section.className = "level";
 
-    const cooldown=document.createElement("span");
-    const restante=Math.max(0,Math.ceil((cooldownAte-Date.now())/1000));
-    cooldown.className=restante>0 ? "level-cooldown active" : "level-cooldown ready";
-    cooldown.textContent=restante>0 ? "⏳ "+restante+"s" : "🔊 PRONTO";
-    title.appendChild(cooldown);
+  const title = document.createElement("div");
+  title.className = "level-title";
 
-    section.appendChild(title);
+  const titleText = document.createElement("span");
+  titleText.textContent = NIVEIS[nivelAtivo]?.label || "🟢 SUAVE";
+  title.appendChild(titleText);
 
-    const buttons=document.createElement("div");
-    buttons.className="buttons";
+  const time = document.createElement("span");
+  time.className = "level-time";
+  time.textContent = "~ " + formatarTempo(tempoRestante);
+  title.appendChild(time);
 
-    categoria.sons.forEach(command=>{
-      const button=document.createElement("button");
-      button.textContent=command;
+  const cooldown = document.createElement("span");
+  const restante = Math.max(0, Math.ceil((cooldownAte - Date.now()) / 1000));
+  cooldown.className = restante > 0 ? "level-cooldown active" : "level-cooldown ready";
+  cooldown.textContent = restante > 0 ? "⏳ " + restante + "s" : "🔊 PRONTO";
+  title.appendChild(cooldown);
 
-      button.onclick=async()=>{
-        if(!canalPronto){
-          status.textContent="🟡 Conectando...";
-          status.className="status waiting";
+  section.appendChild(title);
+
+  const buttons = document.createElement("div");
+  buttons.className = "buttons";
+
+  sonsDisponiveis.forEach(command => {
+    const button = document.createElement("button");
+    button.textContent = command;
+
+    button.onclick = async () => {
+      if (!canalPronto) {
+        status.textContent = "🟡 Conectando...";
+        status.className = "status waiting";
+        return;
+      }
+
+      if (Date.now() < cooldownAte) {
+        atualizarCabecalho();
+        renderizarCategorias();
+        return;
+      }
+
+      button.disabled = true;
+
+      try {
+        const result = await channel.send({
+          type: "broadcast",
+          event: "sound",
+          payload: { command }
+        });
+
+        if (result !== "ok") {
+          console.error("[SOUNDBOARD] channel.send retornou:", result);
+          status.textContent = "🔴 Erro: " + (typeof result === "string" ? result : JSON.stringify(result));
+          status.className = "status offline";
+          button.disabled = false;
           return;
         }
+      } catch (error) {
+        console.error("[SOUNDBOARD] erro no envio:", error);
+        status.textContent = "🔴 Erro: " + (error?.message || String(error));
+        status.className = "status offline";
+        button.disabled = false;
+        return;
+      }
 
-        if(Date.now()<cooldownAte){
-          atualizarCabecalho();
-          renderizarCategorias();
-          return;
-        }
+      setTimeout(() => renderizarCategorias(), 150);
+    };
 
-        button.disabled=true;
-
-        try {
-          const result=await channel.send({
-            type:"broadcast",
-            event:"sound",
-            payload:{command}
-          });
-
-          if(result!=="ok"){
-            console.error("[SOUNDBOARD] channel.send retornou:", result);
-            status.textContent="🔴 Erro: "+(typeof result==="string" ? result : JSON.stringify(result));
-            status.className="status offline";
-            button.disabled=false;
-            return;
-          }
-        } catch(error) {
-          console.error("[SOUNDBOARD] erro no envio:", error);
-          status.textContent="🔴 Erro: "+(error?.message || String(error));
-          status.className="status offline";
-          button.disabled=false;
-          return;
-        }
-
-        setTimeout(()=>renderizarCategorias(),150);
-      };
-
-      buttons.appendChild(button);
-    });
-
-    section.appendChild(buttons);
-    grid.appendChild(section);
+    buttons.appendChild(button);
   });
 
-  if(cooldownRestante>0){
+  section.appendChild(buttons);
+  grid.appendChild(section);
+
+  if (cooldownRestante > 0) {
     grid.classList.add("cooldown-active");
-  }else{
+  } else {
     grid.classList.remove("cooldown-active");
   }
 }
-
 async function tocarRandom() {
   if(!canalPronto){
     status.textContent="🟡 Conectando...";
