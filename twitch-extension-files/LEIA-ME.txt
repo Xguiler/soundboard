@@ -1,28 +1,25 @@
-SOUNDBOARD DO CAOS — ARQUIVOS PARA EXTENSÃO TWITCH
+SOUNDBOARD DO CAOS — ARQUIVOS DA EXTENSÃO
 
-Esta pasta foi criada separada dos arquivos do site, para não alterar a página publicada.
+Esta pasta contém uma versão separada dos arquivos da extensão. Ela não altera os arquivos do site principal.
 
-Arquivos:
+Arquivos necessários:
 - index.html
-- mobile.html
+- mobile.html (somente se for usar uma visualização móvel)
 - config.html
 - config.js
 - realtime.js
 - painel.js
 - painel.css
 
-Também é necessário incluir logo-xguiler.png no ZIP final. Baixe a imagem do repositório principal:
-https://github.com/Xguiler/soundboard/blob/main/logo-xguiler.png
-
 Para montar o ZIP:
-1. Baixe cada arquivo desta pasta mantendo todos na mesma pasta local.
-2. Baixe também logo-xguiler.png pelo link acima.
-3. Selecione os arquivos, clique com o botão direito e escolha Enviar para > Pasta compactada.
-4. Envie o ZIP em Arquivos > Upload Version Assets no console da Twitch.
+1. Baixe os arquivos necessários desta pasta.
+2. Coloque os arquivos selecionados na raiz do ZIP, sem criar uma pasta interna.
+3. Envie o ZIP na área de arquivos da extensão.
+4. Configure os caminhos:
+   - Panel Viewer Path: index.html
+   - Mobile Viewer Path: mobile.html (se utilizado)
+   - Configuration Path: config.html
 
-Configuração na Twitch:
-- Panel Viewer Path: index.html
-- Mobile Viewer Path: mobile.html
-- Configuration Path: config.html
+O painel foi atualizado para explicar os níveis atuais: VIP R$ 1, ELITE R$ 5, FÚRIA R$ 20 e APOCALIPSE R$ 50. A rodada coletiva dura 15 minutos; novas doações somam sem reiniciar o relógio. Cada novo nível adiciona 5 minutos, o nível cai uma etapa quando o tempo acaba e a rodada reinicia em SUAVE quando a janela termina.
 
-A conexão Realtime foi reorganizada para tratar a resposta de inscrição e o retorno de envio. Ainda é necessário testar no modo de teste da Twitch; não há como confirmar o funcionamento sem o teste da extensão.
+Faça um teste da extensão antes de publicar para confirmar a conexão em tempo real e o envio dos sons.
