@@ -1,4 +1,4 @@
-/* Cliente Supabase Realtime simplificado para o painel da extensão Twitch. */
+/* Cliente Supabase Realtime simplificado para o painel da Soundboard. */
 (function(){
   const cfg=window.SB_CONFIG;
   const handlers={broadcast:[],status:[]};
