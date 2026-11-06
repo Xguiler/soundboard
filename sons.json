@@ -57,9 +57,8 @@
     "cooldown": 1
   },
   "!madeira": {
-    "url": "https://www.myinstants.com/media/sounds/tu-quer-madeira.mp3",
-    "level": "vip",
-    "cooldown": 10
+    "url": "https://www.myinstants.com/media/sounds/do-you-want-wood.mp3",
+    "level": "suave"
   },
   "!undaia": {
     "url": "https://www.myinstants.com/media/sounds/undaia-meme.mp3",
@@ -72,7 +71,7 @@
   },
   "!tome": {
     "url": "https://www.myinstants.com/media/sounds/tome-rodrigo-faro_xDXKGwq.mp3",
-    "level": "vip"
+    "level": "suave"
   },
   "!fart": {
     "url": "https://www.myinstants.com/media/sounds/dry-fart.mp3",
@@ -546,5 +545,77 @@
     "url": "https://www.myinstants.com/media/sounds/olha-o-carro-do-danone-em-estourado.mp3",
     "level": "apocalipse",
     "cooldown": 10
+  },
+  "!faah": {
+    "url": "https://www.myinstants.com/media/sounds/faaah.mp3",
+    "level": "suave"
+  },
+  "!finalmeme": {
+    "url": "https://www.myinstants.com/media/sounds/meme-de-creditos-finales.mp3",
+    "level": "suave"
+  },
+  "!iamthestorm": {
+    "url": "https://www.myinstants.com/media/sounds/dmc5-storm-no-sound.mp3",
+    "level": "suave"
+  },
+  "!estoycansado": {
+    "url": "https://www.myinstants.com/media/sounds/estoy-cansado-jefe.mp3",
+    "level": "suave"
+  },
+  "!minhasforças": {
+    "url": "https://www.myinstants.com/media/sounds/sentindo-minhas-forcas-indo-embora.mp3",
+    "level": "suave"
+  },
+  "!letsgetdown": {
+    "url": "https://www.myinstants.com/media/sounds/buziness1.mp3",
+    "level": "suave"
+  },
+  "!agrfu": {
+    "url": "https://www.myinstants.com/media/sounds/agora-fudeu-musica.mp3",
+    "level": "suave"
+  },
+  "!estilonemarra": {
+    "url": "https://www.myinstants.com/media/sounds/estilo-nao-e-marra.mp3",
+    "level": "suave"
+  },
+  "!sampley": {
+    "url": "https://www.myinstants.com/media/sounds/osampley.mp3",
+    "level": "suave"
+  },
+  "!business": {
+    "url": "https://www.myinstants.com/media/sounds/business_ZSrY3Vq.mp3",
+    "level": "suave"
+  },
+  "!aipai": {
+    "url": "https://www.myinstants.com/media/sounds/ai-pai-para-hihi.mp3",
+    "level": "suave"
+  },
+  "!berrante": {
+    "url": "https://www.myinstants.com/media/sounds/toque-de-berrante-para-celular.mp3",
+    "level": "suave"
+  },
+  "!bobmarley": {
+    "url": "https://www.myinstants.com/media/sounds/bobmarleyshort.mp3",
+    "level": "suave"
+  },
+  "!bobmarley2": {
+    "url": "https://www.myinstants.com/media/sounds/three-vkli.mp3",
+    "level": "suave"
+  },
+  "!calmaaipaizao": {
+    "url": "https://www.myinstants.com/media/sounds/calma-ai-paizao.mp3",
+    "level": "suave"
+  },
+  "!calmamix": {
+    "url": "https://www.myinstants.com/media/sounds/auto_tune_desculpa_de_bg-vebado_mp3cut.mp3",
+    "level": "suave"
+  },
+  "!eufinjo": {
+    "url": "https://www.myinstants.com/media/sounds/eu-finjo-que-nao-percebo-completo.mp3",
+    "level": "suave"
+  },
+  "!elefezdnv": {
+    "url": "https://www.myinstants.com/media/sounds/ele-fez-dnv-mas-uma-vez.mp3",
+    "level": "suave"
   }
 }
